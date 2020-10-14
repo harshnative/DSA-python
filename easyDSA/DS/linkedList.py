@@ -184,6 +184,72 @@ class SinglyLinkedList:
             print(result)
             return result
 
+        
+    # function to traverse the list
+    def getListLength(self):
+
+        last = self.head
+        length = 0
+
+        # till be reach list end
+        while(last != None):
+
+            length += 1
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return length
+
+
+    # function to traverse the list
+    # from node and to node are also included
+    def returnList(self , fromNode = 0 , toNode = "till end"):
+
+        last = self.head
+
+        # pos to keep track where we are in linked list
+        pos = 0
+
+        if(toNode == "till end"):
+            toNode = None
+
+        resultList = []
+
+        # to check if we are in the range provided
+        start = False
+
+        # till be reach list end
+        while(last != None):
+
+            # if the pos becomes the from node then start will be become true , so the from node is also added
+            if(pos == fromNode):
+                start = True
+
+            # adding data
+            if(start):
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
+            
+            # if the pos becomes the toNode Value else list will tarverse till last
+            if((pos == toNode) and (toNode != None)):
+                break
+
+            last = last.next
+            pos += 1
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return resultList
+
 
 
 
@@ -220,7 +286,13 @@ def test():
 
     print("\nsecond linked list = \n")
     sll1.traverseList()
+
+    print("\n second list form  2 to end\n")
+    print(sll1.returnList(2))
+
+    print("\n second list form  2 to 5\n")
+    print(sll1.returnList(2 , 5))
     
 if __name__ == "__main__":
-    # test()
-    pass
+    test()
+    # pass
