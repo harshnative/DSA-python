@@ -6,7 +6,7 @@ class Node:
     def __init__(self , *dataArgs):
 
         # data list
-        self.data = [item for item in dataArgs]
+        self.data = list(*dataArgs)
 
         # next pointer 
         self.next = None
@@ -76,11 +76,14 @@ class SinglyLinkedList:
         3. else get the last node
         4. make the last node point to new node"""
 
+        newNode = Node(dataArgs)
+
         if(self.head == None):
-            self.insertAtFront(dataArgs)
+            newNode.next = self.head
+            self.head = newNode
             return
 
-        newNode = Node(dataArgs)
+        
 
         # getting last node
         last = self.getLastNode(useCache)
@@ -92,7 +95,7 @@ class SinglyLinkedList:
 
     # function to return a node at pos
     # raiseError if the pos is not found else return None
-    def returnNodeAtPos(self, pos , raiseError = False):
+    def getNodeAtPos(self, pos , raiseError = False):
 
         last = self.head
         found = False
@@ -135,3 +138,89 @@ class SinglyLinkedList:
         newNode.next = prevNode.next
 
         prevNode.next = newNode
+
+        self.lastNodeCache = None
+
+
+    # function to traverse the list
+    def traverseList(self , dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+
+        last = self.head
+        result = ""
+
+        # till be reach list end
+        while(last != None):
+
+            # adding the node starting string "[ "
+            if(forNode_start != None):
+                result = result + forNode_start
+
+            # adding the elements in last.data list seperated with dataArgs_seperator
+            for i in last.data:
+                result = result + str(i) + dataArgs_seperator
+
+            # removing the lastly added dataArgs_seperator
+            result = result[:(len(dataArgs_seperator) * -1)]
+
+            # adding the node end string " ]"
+            if(forNode_end != None):
+                result = result + forNode_end
+
+            # adding the node seperator
+            result = result + nodeSeperator
+
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        # removing the lastly added nodeSeperator
+        result = result[:(len(nodeSeperator) * -1)]
+
+        if(justReturn):
+            return result
+        else:
+            print(result)
+            return result
+
+
+
+
+
+
+
+
+
+
+
+
+def test():
+    sll = SinglyLinkedList()
+
+    sll.insertAtEnd(1 , "a")
+    sll.insertAtEnd(2 , "b")
+    sll.insertAtEnd(3 , "c")
+    sll.insertAtEnd(4 , "d")
+    sll.insertAtEnd(5 , "e")
+    sll.insertAtFront(0.5 , "f")
+
+    print("first linked list = \n")
+    sll.traverseList()
+
+    sll1 = SinglyLinkedList()
+
+    sll1.insertAtEnd(1)
+    sll1.insertAtEnd(2)
+    sll1.insertAtEnd(3)
+    sll1.insertAfterNode(sll1.getNodeAtPos(2) , 2.5)
+    sll1.insertAtEnd(4)
+    sll1.insertAtEnd(5)
+    sll1.insertAtFront(0.5 , "f")
+
+    print("\nsecond linked list = \n")
+    sll1.traverseList()
+    
+if __name__ == "__main__":
+    # test()
+    pass
