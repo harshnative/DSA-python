@@ -204,7 +204,7 @@ class SinglyLinkedList:
         return length
 
 
-    # function to traverse the list
+    # function to return the list
     # from node and to node are also included
     def returnList(self , fromNode = 0 , toNode = "till end"):
 
@@ -250,6 +250,96 @@ class SinglyLinkedList:
 
         return resultList
 
+    
+
+    
+    # function to delete a node by matching the key - deletes the first occurence
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    # if the startform is passed then traversing will start from their
+    # start is a list type containing the node and the prev node -> [currentNode , prevNode]
+    def deleteNodeAtKey(self , keyList = None , key = None , startForm = None):
+
+        # for tracking the prev node
+        prev = None
+
+        # for tracking wheather to delete a node or not
+        delete = False
+
+        # for traversing the list 
+        last = self.head
+
+        # if the start form is passed
+        if(startForm != None):
+            last = startForm[0]
+            prev = startForm[1]
+
+
+        # till be reach list end
+        while(last != None):
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
+
+            # if the node is set to be deleted
+            if(delete):
+
+                # if the node is head itself
+                if(prev == None):
+                    self.head = last.next
+                    return [last.next , prev]
+                
+                else:
+                    nextNode = last.next               
+                    prev.next = nextNode
+                    return [last.next , prev]
+
+
+            prev = last
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return None
+
+        
+    # function to delete all node containing the key
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    def deleteAllNodeAtKey(self , keyList = None , key = None):
+
+        status = True
+
+        # till node will be none when we are just starting
+        tillNode = None
+
+        while(status):
+
+            # node and prev node will be returned by the function 
+            # if the none is returned that means no other key is left to delete
+            tillNode = self.deleteNodeAtKey(keyList , key , tillNode)
+
+            # break the loop when the till node is none
+            if(tillNode == None):
+                status = False
+
+
+
+
+
+
 
 
 
@@ -292,6 +382,50 @@ def test():
 
     print("\n second list form  2 to 5\n")
     print(sll1.returnList(2 , 5))
+
+    print("\n deleting [0.5 , f] from list\n")
+    sll1.deleteNodeAtKey(keyList=[0.5 , "f"])
+    sll1.traverseList()
+
+    print("\n List after adding [0.6 , 'h']\n")
+    sll1.insertAtFront(0.6 , "h")
+    sll1.traverseList()
+
+    print("\n deleting node containing 0.6  from list\n")
+    sll1.deleteNodeAtKey(key=0.6)
+    sll1.traverseList()
+
+    print("\n List after adding 2 at front\n")
+    sll1.insertAtFront(2)
+    sll1.traverseList()
+
+    print("\n List after adding 3 2's at end\n")
+    sll1.insertAtEnd(2)
+    sll1.insertAtEnd(2)
+    sll1.insertAtEnd(2)
+    sll1.traverseList()
+
+    print("\n List after adding 3 2's at front\n")
+    sll1.insertAtFront(2)
+    sll1.insertAtFront(2)
+    sll1.insertAtFront(2)
+    sll1.traverseList()
+
+    print("\n List after adding 3 2's at after 2.5\n")
+    pos = sll1.getNodeAtPos(7)
+    sll1.insertAfterNode(pos , 2)
+    sll1.insertAfterNode(pos , 2)
+    sll1.insertAfterNode(pos , 2)
+    sll1.traverseList()
+
+    print("\n deleting node containing all 2  from list\n")
+    sll1.deleteAllNodeAtKey(key=2)
+    sll1.traverseList()
+
+    print("\n deleting node containing 2.5  from list\n")
+    sll1.deleteNodeAtKey(key=2.5)
+    sll1.traverseList()
+
     
 if __name__ == "__main__":
     test()
