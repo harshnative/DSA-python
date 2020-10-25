@@ -472,6 +472,63 @@ class SinglyLinkedList:
         return nodeListToReturn
 
 
+    # function to find out if the linked list
+    def isCircular(self):
+
+        # for traversing the list 
+        last = self.head
+
+        # till be reach list end
+        while(last != None):
+            
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                return True
+
+        return False
+
+
+    # function to find out if the linked list
+    def detectLoop(self):
+
+        # for traversing the list 
+        last = self.head
+
+        # till be reach list end
+        while(last != None):
+
+            thisNode = last
+            tempLen = 0
+
+            # traversing the list till the end or the last is reached
+            while(thisNode != None):
+
+                thisNode = thisNode.next
+                tempLen += 1
+
+                if(thisNode  == last):
+                    return tempLen
+            
+            last = last.next
+
+        return False
+
+    
+    # function to sort the linked list
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
+
+        dataList = self.returnList()
+
+        dataList.sort(key = lambda x: x[listPos_reference], reverse=reverse)
+
+        self.deleteEntireList()
+
+        for i in dataList:
+            self.insertAtEnd(i)
+            
+
 
 
                 
