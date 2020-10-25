@@ -335,6 +335,148 @@ class SinglyLinkedList:
             if(tillNode == None):
                 status = False
 
+    
+    # fucntion for deleting the node at a certain position
+    # position starts from 1 
+    def deleteNodeAtPos(self , pos):
+
+        if(pos < 1):
+            raise Exception("position should not be less than 1 , head is at 1'st position")
+
+        # for keeping track of prev node
+        prev = None
+
+        tempPos = 1
+
+        last = self.head
+
+        while(last != None):
+
+            # if the pos is found
+            if(pos == tempPos):
+
+                # if the pos is head
+                if(prev == None):
+                    self.head = last.next
+
+
+                prev.next = last.next
+
+            prev = last
+            last = last.next
+            tempPos += 1
+
+
+    # method to delete the entire linked list
+    # data and reference both are deleted
+    def deleteEntireList(self):
+
+        last = self.head
+
+        while(last != None):
+
+            nextNode = last.next
+
+            del last.data
+            del last.next
+
+            last = nextNode
+
+        self.head = None
+
+
+
+    # function to return the node containing certain key
+    def getNodeAtKey(self , keyList = None , key = None , startForm = None):
+
+        # for tracking wheather to return a node or not
+        returnNode = False
+
+        # for traversing the list 
+        last = self.head
+
+        # if the start form is passed
+        if(startForm != None):
+            last = startForm
+
+        # till be reach list end
+        while(last != None):
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need return this node
+                for i in last.data:
+                    if(i == key):
+                        returnNode = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    returnNode = True
+
+            # if the node is set to be returned
+            if(returnNode):
+                return last
+
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return None
+
+        
+    def getAllNodeAtKey(self , keyList = None , key = None , startForm = None):
+
+        # for tracking wheather to return a node or not
+        returnNode = False
+
+        # for traversing the list 
+        last = self.head
+
+        # list of nodes to return
+        nodeListToReturn = []
+
+        # if the start form is passed
+        if(startForm != None):
+            last = startForm
+
+        # till be reach list end
+        while(last != None):
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need return this node
+                for i in last.data:
+                    if(i == key):
+                        returnNode = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    returnNode = True
+
+            # if the node is set to be returned
+            if(returnNode):
+                nodeListToReturn.append(last)
+
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return nodeListToReturn
+
+
+
+
+                
+
+
 
 
 
@@ -424,6 +566,14 @@ def test():
 
     print("\n deleting node containing 2.5  from list\n")
     sll1.deleteNodeAtKey(key=2.5)
+    sll1.traverseList()
+
+    print("\n deleting node at 2nd pos from list\n")
+    sll1.deleteNodeAtPos(2)
+    sll1.traverseList()
+
+    print("\n deleting entire list\n")
+    sll1.deleteEntireList()
     sll1.traverseList()
 
     
