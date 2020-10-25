@@ -519,14 +519,20 @@ class SinglyLinkedList:
     # function to sort the linked list
     def sortLinkedList(self , listPos_reference = 0 , reverse = False):
 
+        # conv the linked list to python normal list
         dataList = self.returnList()
 
-        dataList.sort(key = lambda x: x[listPos_reference], reverse=reverse)
+        # sorting list
+        dataList.sort(key = lambda x: x[listPos_reference])
 
         self.deleteEntireList()
 
+        # making new sorted linked list
         for i in dataList:
-            self.insertAtEnd(i)
+            if(reverse):
+                self.insertAtFront(*i)
+            else:
+                self.insertAtEnd(*i)
             
 
 
@@ -627,6 +633,18 @@ def test():
 
     print("\n deleting node at 2nd pos from list\n")
     sll1.deleteNodeAtPos(2)
+    sll1.traverseList()
+
+    print("\n After adding 6 to front\n")
+    sll1.insertAtFront(6)
+    sll1.traverseList()
+
+    print("\n After sorting \n")
+    sll1.sortLinkedList()
+    sll1.traverseList()
+
+    print("\n After sorting in reverse\n")
+    sll1.sortLinkedList(reverse=True)
     sll1.traverseList()
 
     print("\n deleting entire list\n")
