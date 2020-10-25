@@ -533,6 +533,64 @@ class SinglyLinkedList:
                 self.insertAtFront(*i)
             else:
                 self.insertAtEnd(*i)
+
+    
+    # function to delete all the duplicate elements in sorted list
+    def delDuplicateShorted(self , entireData = True , specificPosInData = None):
+
+        last = self.head
+
+        # need to check as while loop starts form last.next
+        if(last == None):
+            return
+
+        while(last.next != None):
+
+            # if the data matches we delete the next node
+            if(last.next.data == last.data):
+                if(entireData):
+                    self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                else:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
+            else:
+                last = last.next
+
+
+    # function to delete all the duplicate elements in unsorted list
+    def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
+
+        last = self.head
+
+        # need to check as while loop starts form last.next
+        if(last == None):
+            return
+
+        while(last.next != None):
+
+            temp = last
+
+            # second loop for checking the next elements in list with the last element
+            while(temp.next != None):
+                
+                # if the data matches we delete the next node
+                if(temp.next.data == last.data):
+                    if(entireData):
+                        self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                    else:
+                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
+                else:
+                    temp = temp.next
+
+            last = last.next
+
+                    
+
+            
+            
+            
+
+
+    
             
 
 
@@ -623,33 +681,50 @@ def test():
     sll1.insertAfterNode(pos , 2)
     sll1.traverseList()
 
-    print("\n deleting node containing all 2  from list\n")
-    sll1.deleteAllNodeAtKey(key=2)
+    print("\n after removing all duplicate elements")
+    sll1.delDuplicateUnShorted()
     sll1.traverseList()
 
-    print("\n deleting node containing 2.5  from list\n")
-    sll1.deleteNodeAtKey(key=2.5)
-    sll1.traverseList()
 
-    print("\n deleting node at 2nd pos from list\n")
-    sll1.deleteNodeAtPos(2)
-    sll1.traverseList()
-
-    print("\n After adding 6 to front\n")
-    sll1.insertAtFront(6)
-    sll1.traverseList()
-
-    print("\n After sorting \n")
-    sll1.sortLinkedList()
-    sll1.traverseList()
-
-    print("\n After sorting in reverse\n")
+    print("\n After sorting\n")
     sll1.sortLinkedList(reverse=True)
     sll1.traverseList()
 
-    print("\n deleting entire list\n")
-    sll1.deleteEntireList()
-    sll1.traverseList()
+    # print("\n after removing all duplicate elements")
+    # sll1.delDuplicateShorted()
+    # sll1.traverseList()
+
+
+
+    
+
+    # print("\n deleting node containing all 2  from list\n")
+    # sll1.deleteAllNodeAtKey(key=2)
+    # sll1.traverseList()
+
+    # print("\n deleting node containing 2.5  from list\n")
+    # sll1.deleteNodeAtKey(key=2.5)
+    # sll1.traverseList()
+
+    # print("\n deleting node at 2nd pos from list\n")
+    # sll1.deleteNodeAtPos(2)
+    # sll1.traverseList()
+
+    # print("\n After adding 6 to front\n")
+    # sll1.insertAtFront(6)
+    # sll1.traverseList()
+
+    # print("\n After sorting \n")
+    # sll1.sortLinkedList()
+    # sll1.traverseList()
+
+    # print("\n After sorting in reverse\n")
+    # sll1.sortLinkedList(reverse=True)
+    # sll1.traverseList()
+
+    # print("\n deleting entire list\n")
+    # sll1.deleteEntireList()
+    # sll1.traverseList()
 
     
 if __name__ == "__main__":
