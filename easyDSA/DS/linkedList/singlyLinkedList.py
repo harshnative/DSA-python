@@ -583,6 +583,30 @@ class SinglyLinkedList:
 
             last = last.next
 
+
+    # function to reverse a linked list
+    def reverseLinkedList(self):
+        current = self.head
+        prev = None
+        next = None
+        
+        while(current != None):
+
+            # storing next
+            next = current.next
+
+            # reversing the direction
+            current.next = prev
+
+            # moving to next element
+            prev = current
+            current = next
+
+            # just to avoid infinite loop
+            if(current == self.head):
+                break
+
+
                     
 
             
