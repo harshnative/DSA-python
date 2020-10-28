@@ -24,6 +24,10 @@ class SinglyLinkedList:
         # cache obj for last node
         self.lastNodeCache = None
 
+    # function to return the head
+    def returnHead(self):
+        return self.head
+
 
     # function to insert a node at front
     def insertAtFront(self , *dataArgs):
@@ -50,8 +54,12 @@ class SinglyLinkedList:
 
         else:
 
+
             # traversing till last Node
             last = self.head
+
+            if(last == None):
+                return None
 
             while(last.next != None):
 
@@ -119,8 +127,7 @@ class SinglyLinkedList:
 
 
     # function to insert a node after a provided node
-    # raise error if the prev node is None else operation is not performed
-    def insertAfterNode(self , prevNode , *dataArgs , raiseError = True):
+    def insertAfterNode(self , prevNode , *dataArgs):
 
         """Algo - 
         1. generate new node
@@ -128,10 +135,7 @@ class SinglyLinkedList:
         3. make the prev node point to new node"""
 
         if(prevNode == None):
-            if(raiseError):
                 raise RuntimeError("prev node should not be None")
-            else:
-                return
 
         newNode = Node(dataArgs)
 
