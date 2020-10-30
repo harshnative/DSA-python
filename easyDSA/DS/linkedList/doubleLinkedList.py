@@ -249,6 +249,135 @@ class DoublyLinkedList:
         del nodeToBeDeleted
 
 
+     # function to reverse a linked list
+    def reverseLinkedList(self):
+        current = self.head
+        prevNode = None
+        
+        while(current != None):
+
+            # storing prev
+            prevNode = current.prev
+
+            # reversing the direction
+            current.prev = current.next
+            current.next = prevNode
+
+            # moving to next element
+            current = current.prev
+
+            # just to avoid infinite loop
+            if(current == self.head):
+                break
+
+        if(prevNode != None):
+            self.head = prevNode.prev
+
+
+    # function to return the list
+    # from node and to node are also included
+    def returnList(self , fromNode = 0 , toNode = "till end"):
+
+        last = self.head
+
+        # pos to keep track where we are in linked list
+        pos = 0
+
+        if(toNode == "till end"):
+            toNode = None
+
+        resultList = []
+
+        # to check if we are in the range provided
+        start = False
+
+        # till be reach list end
+        while(last != None):
+
+            # if the pos becomes the from node then start will be become true , so the from node is also added
+            if(pos == fromNode):
+                start = True
+
+            # adding data
+            if(start):
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
+            
+            # if the pos becomes the toNode Value else list will tarverse till last
+            if((pos == toNode) and (toNode != None)):
+                break
+
+            last = last.next
+            pos += 1
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return resultList
+
+
+    # function to traverse the list and get its length
+    def getListLength(self):
+
+        last = self.head
+        length = 0
+
+        # till be reach list end
+        while(last != None):
+
+            length += 1
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return length
+
+
+    
+    # method to delete the entire linked list
+    # data and reference both are deleted
+    def deleteEntireList(self):
+
+        last = self.head
+
+        while(last != None):
+
+            nextNode = last.next
+
+            del last.data
+            del last.next
+            del last.prev
+
+            last = nextNode
+
+        self.head = None
+
+    
+    # function to sort the linked list
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
+
+        # conv the linked list to python normal list
+        dataList = self.returnList()
+
+        # sorting list
+        dataList.sort(key = lambda x: x[listPos_reference])
+
+        self.deleteEntireList()
+
+        # making new sorted linked list
+        for i in dataList:
+            if(reverse):
+                self.insertAtFront(*i)
+            else:
+                self.insertAtEnd(*i)
+
 
 
 
@@ -278,6 +407,20 @@ def test():
 
     dll.deleteNode(dll.getNodeAtPos(3))
     print("\nafter deleting node at pos = 3")
+    dll.traverseList()
+
+
+    dll.reverseLinkedList()
+    print("\nafter reversing = ")
+    dll.traverseList()
+
+    dll.deleteNode(dll.getNodeAtPos(1))
+    print("\nafter deleting head = ")
+    dll.traverseList()
+
+
+    dll.sortLinkedList()
+    print("\nafter sorting = ")
     dll.traverseList()
 
 
