@@ -215,6 +215,45 @@ class DoublyLinkedList:
 
 
 
+    # function to delete a node
+    def deleteNode(self , nodeToBeDeleted):
+
+        if(self.head == None):
+            raise Exception("list is empty")
+    
+        if(nodeToBeDeleted == None):
+            raise Exception("node to be deleted cannot be None")
+        
+        # checking if the node to be deleted is head
+        if(nodeToBeDeleted == self.head):
+            self.head = nodeToBeDeleted.next
+            self.head.prev = None
+            return
+        
+        # checking if the node is last node
+        if(nodeToBeDeleted.next == None):
+            prevNode = nodeToBeDeleted.prev
+            prevNode.next = None
+            del nodeToBeDeleted
+            return
+
+        # else
+        # prevNode.next = nextNode
+        # nextNode.prev = prevNode
+        nextNode = nodeToBeDeleted.next
+        prevNode = nodeToBeDeleted.prev
+
+        prevNode.next = nextNode
+        nextNode.prev = prevNode
+
+        del nodeToBeDeleted
+
+
+
+
+
+
+
 
 
 def test():
@@ -228,6 +267,19 @@ def test():
     dll.insertAfterNode(dll.getNodeAtPos(3) , "hello" , 'e')
     dll.insertBeforeNode(dll.getNodeAtPos(7) , "hello" , 'e')
     dll.traverseList()
+
+    dll.deleteNode(dll.getNodeAtPos(1))
+    print("\nafter deleting head")
+    dll.traverseList()
+
+    dll.deleteNode(dll.getNodeAtPos(7))
+    print("\nafter deleting tail")
+    dll.traverseList()
+
+    dll.deleteNode(dll.getNodeAtPos(3))
+    print("\nafter deleting node at pos = 3")
+    dll.traverseList()
+
 
 
 if __name__ == "__main__":
