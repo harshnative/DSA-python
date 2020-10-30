@@ -26,6 +26,11 @@ class DoublyLinkedList:
         self.lastNodeCache = None
 
 
+    # function to return the head
+    def returnHead(self):
+        return self.head
+
+
     
     # function to insert at front
     def insertAtFront(self, *dataArgs):
