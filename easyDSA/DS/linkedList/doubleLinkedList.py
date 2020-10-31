@@ -219,7 +219,9 @@ class DoublyLinkedList:
 
         if(not(found) and raiseError):
             raise RuntimeError("position could not be found")
-
+        elif(not(found)):
+            return None
+            
         return last
 
 
@@ -502,6 +504,7 @@ class DoublyLinkedList:
 
             # if the node is set to be deleted
             if(delete):
+                delete = False
                 if(allNode):
                     nodeList.append(last)
                 else:

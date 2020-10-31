@@ -202,6 +202,8 @@ class CircularLinkedList:
 
         if(not(found) and raiseError):
             raise RuntimeError("position could not be found")
+        elif(not(found)):
+            return None
 
         return last
 
@@ -293,6 +295,249 @@ class CircularLinkedList:
         del node
 
 
+    # function to delete node at pos
+    def deleteNodeAtPos(self, pos):
+        node = self.getNodeAtPos(pos , True)
+        
+        self.deleteNode(node)
+
+    
+    # method to delete the entire linked list
+    # data and reference both are deleted
+    def deleteEntireList(self):
+
+        last = self.head
+
+        temp = self.head
+
+        while(last != None):
+
+            nextNode = last.next
+
+            del last.data
+            del last.next
+            del last.prev
+
+            last = nextNode
+
+            if(nextNode == temp):
+                del temp
+                break
+
+        self.head = None
+
+
+    
+       # function to sort the linked list
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
+
+        # conv the linked list to python normal list
+        dataList = self.returnList()
+
+        # sorting list
+        dataList.sort(key = lambda x: x[listPos_reference])
+
+        self.deleteEntireList()
+
+        # making new sorted linked list
+        for i in dataList:
+            if(reverse):
+                self.insertAtFront(*i)
+            else:
+                self.insertAtEnd(*i)
+
+
+    # function to delete a node by matching the key - deletes the first occurence
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    # if the startform is passed then traversing will start from their
+    def deleteNodeAtKey(self , keyList = None , key = None , startForm = None):
+
+        # for tracking wheather to delete a node or not
+        delete = False
+
+        # for traversing the list 
+        last = self.head
+
+        temp = self.head
+
+        # if the start form is passed
+        if(startForm != None):
+            last = startForm
+
+
+        # till be reach list end
+        while(last != None):
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
+
+            # if the node is set to be deleted
+            if(delete):
+                self.deleteNode(last)
+                temp = self.head
+                return last.next
+
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == temp):
+                break
+
+        return None
+
+
+    # function to delete all node containing the key
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    def deleteAllNodeAtKey(self , keyList = None , key = None):
+
+        status = True
+
+        # till node will be none when we are just starting
+        tillNode = None
+
+        while(status):
+
+            # node and prev node will be returned by the function 
+            # if the none is returned that means no other key is left to delete
+            tillNode = self.deleteNodeAtKey(keyList , key , tillNode)
+            
+            # break the loop when the till node is none
+            if(tillNode == None):
+                status = False
+
+
+    def getNodeAtKey(self , keyList = None , key = None , startForm = None , allNode = True):
+
+        # for tracking wheather to delete a node or not
+        delete = False
+
+        nodeList = []
+
+        # for traversing the list 
+        last = self.head
+
+        # if the start form is passed
+        if(startForm != None):
+            last = startForm
+
+
+        # till be reach list end
+        while(last != None):
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
+
+            # if the node is set to be deleted
+            if(delete):
+                delete = False
+                if(allNode):
+                    nodeList.append(last)
+                else:
+                    return last
+
+            
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return nodeList
+
+
+
+    # function to find out if the linked list
+    def isCircular(self):
+
+        # for traversing the list 
+        last = self.head
+
+        # till be reach list end
+        while(last != None):
+            
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                return True
+
+        return False
+
+
+
+     # function to delete all the duplicate elements in sorted list
+    def delDuplicateShorted(self , entireData = True , specificPosInData = None):
+
+        last = self.head
+
+        # need to check as while loop starts form last.next
+        if(last == None):
+            return
+
+        while((last.next != None) and (last.next != self.head)):
+
+            # if the data matches we delete the next node
+            if(last.next.data == last.data):
+                if(entireData):
+                    self.deleteNodeAtKey(last.data , startForm=last.next)
+                else:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+            
+            else:
+                last = last.next
+
+
+            
+
+
+    # function to delete all the duplicate elements in unsorted list
+    def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
+
+        last = self.head
+        
+        # need to check as while loop starts form last.next
+        if(last == None):
+            return
+
+        while((last.next != None) and (last.next != self.head)):
+
+            temp = last
+
+            # second loop for checking the next elements in list with the last element
+            while((temp.next != None) and (temp.next != self.head)):
+                
+                # if the data matches we delete the next node
+                if(temp.next.data == last.data):
+                    if(entireData):
+                        self.deleteNodeAtKey(last.data , startForm=last.next)
+                    else:
+                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                else:
+                    temp = temp.next
+
+            last = last.next
 
 
 
@@ -331,23 +576,61 @@ def test():
     dll.insertAtFront(6 , 'e')
     dll.traverseList()
 
-    print("\n7")
-    dll.insertAfterNode(dll.getNodeAtPos(3) , "hello" , 'e')
+    # print("\n7")
+    # dll.insertAfterNode(dll.getNodeAtPos(3) , "hello" , 'e')
+    # dll.traverseList()
+
+    # print("\n8")
+    # dll.insertBeforeNode(dll.getNodeAtPos(7) , "bye" , 'e')
+    # dll.traverseList()
+
+    # print("\n9")
+    # dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
+    # dll.traverseList()
+
+    # print("\n10")
+    # dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
+    # dll.traverseList()
+
+    # print("\n11")
+    # dll.insertAtFront("tata" , 's')
+    # dll.traverseList()
+
+    # print("\n12")
+    # dll.insertAtEnd("tata" , 's')
+    # dll.traverseList()
+
+    # print("\n13")
+    # dll.deleteEntireList()
+    # dll.traverseList()
+
+    
+    
+
+
+    print("\n14")
+    print(dll.insertAtFront(1 , 'a'))
     dll.traverseList()
 
-    print("\n8")
-    dll.insertBeforeNode(dll.getNodeAtPos(7) , "bye" , 'e')
+
+    print("\n15")
+    print(dll.insertAtEnd(1 , 'a'))
     dll.traverseList()
 
-    print("\n9")
-    print(dll.getNodeAtPos(12).data)
-    dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
+    print("\n15")
+    print(dll.insertAfterNode( dll.getNodeAtPos(4) ,  1 , 'a'))
+    dll.traverseList()
+
+    # print("\n13")
+    # print(dll.sortLinkedList())
+    # dll.traverseList()
+
+    print("\n15")
+    print(dll.delDuplicateUnShorted())
     dll.traverseList()
 
 
-    print("\nlist length = " , dll.getListLength())
-
-    print("\nlist = " , dll.returnList())
+    
 
 
 if __name__ == "__main__":

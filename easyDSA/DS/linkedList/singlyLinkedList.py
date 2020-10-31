@@ -122,7 +122,10 @@ class SinglyLinkedList:
 
         if(not(found) and raiseError):
             raise RuntimeError("position could not be found")
-
+        
+        elif(not(found)):
+            return None
+            
         return last
 
 
@@ -465,6 +468,7 @@ class SinglyLinkedList:
 
             # if the node is set to be returned
             if(returnNode):
+                returnNode = False
                 nodeListToReturn.append(last)
 
             last = last.next
