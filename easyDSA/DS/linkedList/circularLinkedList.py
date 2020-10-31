@@ -182,6 +182,9 @@ class CircularLinkedList:
     # raiseError if the pos is not found else return None
     def getNodeAtPos(self, pos , raiseError = False , continueLoop = True):
 
+        if(pos < 1):
+            raise Exception("position cannot be less than 1")
+
         last = self.head
         found = False
 
@@ -516,7 +519,7 @@ class CircularLinkedList:
     def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
-        
+
         # need to check as while loop starts form last.next
         if(last == None):
             return
@@ -538,6 +541,33 @@ class CircularLinkedList:
                     temp = temp.next
 
             last = last.next
+
+
+    def reverseLinkedList(self):
+
+        if (self.head == None): 
+            return
+
+        current = self.head
+       
+        while(current != None):
+            nextNode = current.next
+            prevNode = current.prev
+
+            current.prev = nextNode
+            current.next = prevNode
+
+            current = nextNode
+
+            if(current == self.head):
+                break
+
+        temp = self.head
+
+        self.deleteNodeAtPos(1)
+
+        self.insertAtEnd(*temp.data)
+
 
 
 
@@ -609,16 +639,16 @@ def test():
 
 
     print("\n14")
-    print(dll.insertAtFront(1 , 'a'))
+    dll.insertAtFront(1 , 'a')
     dll.traverseList()
 
 
     print("\n15")
-    print(dll.insertAtEnd(1 , 'a'))
+    dll.insertAtEnd(1 , 'a')
     dll.traverseList()
 
     print("\n15")
-    print(dll.insertAfterNode( dll.getNodeAtPos(4) ,  1 , 'a'))
+    dll.insertAfterNode( dll.getNodeAtPos(4) ,  1 , 'a')
     dll.traverseList()
 
     # print("\n13")
@@ -626,8 +656,9 @@ def test():
     # dll.traverseList()
 
     print("\n15")
-    print(dll.delDuplicateUnShorted())
+    dll.delDuplicateUnShorted()
     dll.traverseList()
+
 
 
     

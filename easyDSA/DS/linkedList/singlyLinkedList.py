@@ -105,6 +105,9 @@ class SinglyLinkedList:
     # raiseError if the pos is not found else return None
     def getNodeAtPos(self, pos , raiseError = False):
 
+        if(pos < 1):
+            raise Exception("position cannot be less than 1")
+
         last = self.head
         found = False
 
@@ -341,6 +344,41 @@ class SinglyLinkedList:
             # break the loop when the till node is none
             if(tillNode == None):
                 status = False
+
+
+
+
+    # function to delete a node
+    def deleteNode(self , node):
+
+        # for keeping track of prev node
+        prev = None
+
+        last = self.head
+
+        while(last != None):
+
+            # if the pos is found
+            if(last == node):
+
+                if(prev == None):
+                    self.head = last.next
+                    del last
+                    return
+                
+                else:
+                    prev.next = last.next
+                    del last
+                    return
+
+            prev = last
+            last = last.next
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+
 
     
     # fucntion for deleting the node at a certain position

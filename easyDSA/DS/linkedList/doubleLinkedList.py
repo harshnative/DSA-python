@@ -202,6 +202,9 @@ class DoublyLinkedList:
     # raiseError if the pos is not found else return None
     def getNodeAtPos(self, pos , raiseError = False):
 
+        if(pos < 1):
+            raise Exception("position cannot be less than 1")
+
         last = self.head
         found = False
 
