@@ -197,7 +197,7 @@ class CircularLinkedList:
 
             pos -= 1
 
-            if((last.next == self.head) and (continueLoop)):
+            if((last.next == self.head) and not(continueLoop)):
                 break
 
         if(not(found) and raiseError):
@@ -207,6 +207,96 @@ class CircularLinkedList:
 
 
 
+    # function to traverse the list
+    def getListLength(self):
+
+        last = self.head
+        
+        length = 0
+
+        # till be reach list end
+        while((last != None)):
+
+            last = last.next
+
+            length = length + 1
+
+            if(last == self.head):
+                break
+
+        return length
+
+
+    # function to return the list
+    # from node and to node are also included
+    def returnList(self , fromNode = 0 , toNode = "till end"):
+
+        last = self.head
+
+        # pos to keep track where we are in linked list
+        pos = 0
+
+        if(toNode == "till end"):
+            toNode = None
+
+        resultList = []
+
+        # to check if we are in the range provided
+        start = False
+
+        # till be reach list end
+        while(last != None):
+
+            # if the pos becomes the from node then start will be become true , so the from node is also added
+            if(pos == fromNode):
+                start = True
+
+            # adding data
+            if(start):
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
+            
+            # if the pos becomes the toNode Value else list will tarverse till last
+            if((pos == toNode) and (toNode != None)):
+                break
+
+            last = last.next
+            pos += 1
+
+            # just to avoid infinite loop
+            if(last == self.head):
+                break
+
+        return resultList
+
+    
+    # function to delete a node
+    def deleteNode(self, node):
+
+        # if the list is empty 
+        if(self.head == None):
+            return
+
+        prevNode = node.prev
+        nextNode = node.next
+
+        prevNode.next = nextNode
+        nextNode.prev = prevNode
+
+        if(node == self.head):
+            self.head = nextNode
+
+        del node
+
+
+
+
+
+        
 
 
 
@@ -249,7 +339,15 @@ def test():
     dll.insertBeforeNode(dll.getNodeAtPos(7) , "bye" , 'e')
     dll.traverseList()
 
+    print("\n9")
+    print(dll.getNodeAtPos(12).data)
+    dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
+    dll.traverseList()
 
+
+    print("\nlist length = " , dll.getListLength())
+
+    print("\nlist = " , dll.returnList())
 
 
 if __name__ == "__main__":
