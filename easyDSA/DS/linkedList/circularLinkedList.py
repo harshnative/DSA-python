@@ -29,6 +29,14 @@ class CircularLinkedList:
     def returnHead(self):
         return self.head
 
+
+    # set custom head to perform operations
+    def setCustomHead(self , head , deletePrevList=True):
+        if(deletePrevList):
+            self.deleteEntireList()
+
+        self.head = head
+
     # function to insert in a empty list
     def insertInEmpty(self , *dataArgs):
         if(self.head != None):
@@ -99,6 +107,8 @@ class CircularLinkedList:
 
     # function to get the last node 
     def getLastNode(self):
+        if(self.head == None):
+            return None
         return self.head.prev
 
             
@@ -293,7 +303,12 @@ class CircularLinkedList:
         nextNode.prev = prevNode
 
         if(node == self.head):
-            self.head = nextNode
+            if(nextNode == self.head):
+                self.head = None
+            else:
+                self.head = nextNode
+
+
 
         del node
 

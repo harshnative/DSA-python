@@ -30,6 +30,14 @@ class DoublyLinkedList:
     def returnHead(self):
         return self.head
 
+    
+    # set custom head to perform operations
+    def setCustomHead(self , head , deletePrevList=True):
+        if(deletePrevList):
+            self.deleteEntireList()
+
+        self.head = head
+
 
     
     # function to insert at front
