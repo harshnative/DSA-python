@@ -580,84 +580,84 @@ class CircularLinkedList:
 
 
 def test():
-    dll = CircularLinkedList()
+    cll = CircularLinkedList()
 
     print("1")
-    dll.insertAtEnd(1 , 'a')
-    dll.traverseList()
+    cll.insertAtEnd(1 , 'a')
+    cll.traverseList()
 
     print("\n2")
-    dll.insertAtEnd(2 , 'b')
-    dll.traverseList()
+    cll.insertAtEnd(2 , 'b')
+    cll.traverseList()
 
     print("\n3")
-    dll.insertAtEnd(3 , 'c')
-    dll.traverseList()
+    cll.insertAtEnd(3 , 'c')
+    cll.traverseList()
 
     print("\n4")
-    dll.insertAtEnd(4 , 'd')
-    dll.traverseList()
+    cll.insertAtEnd(4 , 'd')
+    cll.traverseList()
 
     print("\n5")
-    dll.insertAtFront(5 , 'e')
-    dll.traverseList()
+    cll.insertAtFront(5 , 'e')
+    cll.traverseList()
 
     print("\n6")
-    dll.insertAtFront(6 , 'e')
-    dll.traverseList()
+    cll.insertAtFront(6 , 'e')
+    cll.traverseList()
 
     # print("\n7")
-    # dll.insertAfterNode(dll.getNodeAtPos(3) , "hello" , 'e')
-    # dll.traverseList()
+    # cll.insertAfterNode(cll.getNodeAtPos(3) , "hello" , 'e')
+    # cll.traverseList()
 
     # print("\n8")
-    # dll.insertBeforeNode(dll.getNodeAtPos(7) , "bye" , 'e')
-    # dll.traverseList()
+    # cll.insertBeforeNode(cll.getNodeAtPos(7) , "bye" , 'e')
+    # cll.traverseList()
 
     # print("\n9")
-    # dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
-    # dll.traverseList()
+    # cll.insertBeforeNode(cll.getNodeAtPos(12) , "tata" , 's')
+    # cll.traverseList()
 
     # print("\n10")
-    # dll.insertBeforeNode(dll.getNodeAtPos(12) , "tata" , 's')
-    # dll.traverseList()
+    # cll.insertBeforeNode(cll.getNodeAtPos(12) , "tata" , 's')
+    # cll.traverseList()
 
     # print("\n11")
-    # dll.insertAtFront("tata" , 's')
-    # dll.traverseList()
+    # cll.insertAtFront("tata" , 's')
+    # cll.traverseList()
 
     # print("\n12")
-    # dll.insertAtEnd("tata" , 's')
-    # dll.traverseList()
+    # cll.insertAtEnd("tata" , 's')
+    # cll.traverseList()
 
     # print("\n13")
-    # dll.deleteEntireList()
-    # dll.traverseList()
+    # cll.deleteEntireList()
+    # cll.traverseList()
 
     
     
 
 
     print("\n14")
-    dll.insertAtFront(1 , 'a')
-    dll.traverseList()
+    cll.insertAtFront(1 , 'a')
+    cll.traverseList()
 
 
     print("\n15")
-    dll.insertAtEnd(1 , 'a')
-    dll.traverseList()
+    cll.insertAtEnd(1 , 'a')
+    cll.traverseList()
 
     print("\n15")
-    dll.insertAfterNode( dll.getNodeAtPos(4) ,  1 , 'a')
-    dll.traverseList()
+    cll.insertAfterNode( cll.getNodeAtPos(4) ,  1 , 'a')
+    cll.traverseList()
 
     # print("\n13")
-    # print(dll.sortLinkedList())
-    # dll.traverseList()
+    # print(cll.sortLinkedList())
+    # cll.traverseList()
 
     print("\n15")
-    dll.delDuplicateUnShorted()
-    dll.traverseList()
+    cll.delDuplicateUnShorted()
+    cll.traverseList()
 
 
 
