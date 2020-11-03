@@ -125,6 +125,68 @@ class CircularLinkedList:
         self.insertAtEnd(*temp.data)
 
 
+    # function to traverse the list
+    def getListLength(self):
+
+        last = self.head
+        
+        length = 0
+
+        # till be reach list end
+        while((last != None)):
+
+            last = last.next
+
+            length = length + 1
+
+            if(last == self.head):
+                break
+
+        return length
+
+    
+    # function to traverse the list
+    def traverseList(self , dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+
+        last = self.head
+        result = ""
+
+        
+        # till be reach list end
+        while((last != None)):
+
+            # adding the node starting string "[ "
+            if(forNode_start != None):
+                result = result + forNode_start
+
+            # adding the elements in last.data list seperated with dataArgs_seperator
+            for i in last.data:
+                result = result + str(i) + dataArgs_seperator
+
+            # removing the lastly added dataArgs_seperator
+            result = result[:(len(dataArgs_seperator) * -1)]
+
+            # adding the node end string " ]"
+            if(forNode_end != None):
+                result = result + forNode_end
+
+            # adding the node seperator
+            result = result + nodeSeperator
+
+            last = last.next
+
+            if(last == self.head):
+                break
+
+        # removing the lastly added nodeSeperator
+        result = result[:(len(nodeSeperator) * -1)]
+
+        if(justReturn):
+            return result
+        else:
+            print(result)
+            return result
+
 
 
 
@@ -166,6 +228,7 @@ class StackUsingArray:
 
 
 
+
 # circular linked list implementation of stack
 # circular doubly linked list is chosen because insertion and deletion is O(1)
 class StackUsingLinkedList:
@@ -204,8 +267,7 @@ class StackUsingLinkedList:
 
     # function to return the head so that more operations can be performed
     def returnHead(self):
-        self.cll.returnHead()
-
+        return self.cll.returnHead()
 
 
 
@@ -238,14 +300,6 @@ class stackOperations:
     @classmethod
     def sortStack(cls , stackObj , listPos_reference = 0 , reverse = False):
 
-        # if the stack is pre in simple list form
-        if(type(stackObj) == type([])):
-
-            # as it is stack of if in ascending form is required , then we need to do sort in desending order as elements get reversed when we pop them out
-            # like stack is [1,2,4,3] were 3 is top then we sort in desending order and it becomes [4,3,2,1] so and we pop out 1,2,3,4 so its is in asending order to user
-            stackObj.sort(key = lambda x: x[listPos_reference] , reverse = not(reverse))
-            return
-
         # else it is converted to the list first 
         stack = []
 
@@ -256,6 +310,232 @@ class stackOperations:
 
         for i in stack:
             stackObj.push(*i)
+
+    @classmethod
+    def getLength(cls , stackObj):
+
+        # if the stack is pre in simple list form
+        if(type(stackObj) == type(StackUsingArray())):
+            return len(stackObj.returnList())
+
+        else:
+            last = stackObj.returnHead()
+        
+            length = 0
+
+            # till be reach list end
+            while((last != None)):
+
+                last = last.next
+
+                length = length + 1
+
+                if(last == stackObj.returnHead()):
+                    break
+
+            return length
+
+    
+    @classmethod
+    def traverse(cls , stackObj , asAdded = False ,  dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]" , noPop = False):
+
+        stack = []
+
+        # getting stack elements
+        while(not(stackObj.isEmpty())):
+            stack.append(stackObj.pop())
+        
+        result = ""
+        tempStack = []
+
+        # elements will be added back if noPop is required
+        if(noPop):
+            
+            # as while added back the stack will get reversed so we are pre reversing to null the upcomming effect
+            tempStack = stack[::-1]
+
+            for i in tempStack:
+                stackObj.push(*i)
+
+        # if the priting as to be done in the same direction in which the stack elements were added
+        # then we need to reverse the stack
+        if(asAdded and noPop):
+            stack = tempStack
+
+        elif(asAdded):
+            stack = stack[::-1]
+
+        # adding the result
+        for i in stack:
+
+            result = result + forNode_start
+            
+            for j in i:
+                result = result + str(j) + dataArgs_seperator
+
+            result = result[:len(dataArgs_seperator) * -1]
+
+            result = result + forNode_end
+
+            result = result + nodeSeperator
+
+        result = result[:len(nodeSeperator) * -1]
+
+        if(justReturn):
+            return result
+        else:
+            print(result)
+            return result
+
+    
+
+    @classmethod
+    def quickTraverse(cls , stackObj , asAdded = False ,  dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+
+        # if the stack is pre in simple list form
+        if(type(stackObj) == type(StackUsingArray())):
+            stack = stackObj.returnList()
+        
+            result = ""
+
+            # if not as added then we need to print in reverse
+            if(not(asAdded)):
+
+                # adding the result
+                for i in stack[::-1]:
+
+                    result = result + forNode_start
+                    
+                    for j in i:
+                        result = result + str(j) + dataArgs_seperator
+
+                    result = result[:len(dataArgs_seperator) * -1]
+
+                    result = result + forNode_end
+
+                    result = result + nodeSeperator
+
+                result = result[:len(nodeSeperator) * -1]
+
+            # else simply print
+            else:
+
+                # adding the result
+                for i in stack:
+
+                    result = result + forNode_start
+                    
+                    for j in i:
+                        result = result + str(j) + dataArgs_seperator
+
+                    result = result[:len(dataArgs_seperator) * -1]
+
+                    result = result + forNode_end
+
+                    result = result + nodeSeperator
+
+                result = result[:len(nodeSeperator) * -1]
+
+            if(justReturn):
+                return result
+            else:
+                print(result)
+                return result
+
+        # else if the stack was in circular linked list form
+        else:
+
+            # if not as added then we need to print in reverse
+            if(not(asAdded)):
+
+                # traversing doubly cicular linked list in reverse direction
+                last = stackObj.returnHead().prev
+                result = ""
+
+                
+                # till be reach list end
+                while((last != None)):
+
+                    # adding the node starting string "[ "
+                    if(forNode_start != None):
+                        result = result + forNode_start
+
+                    # adding the elements in last.data list seperated with dataArgs_seperator
+                    for i in last.data:
+                        result = result + str(i) + dataArgs_seperator
+
+                    # removing the lastly added dataArgs_seperator
+                    result = result[:(len(dataArgs_seperator) * -1)]
+
+                    # adding the node end string " ]"
+                    if(forNode_end != None):
+                        result = result + forNode_end
+
+                    # adding the node seperator
+                    result = result + nodeSeperator
+
+                    last = last.prev
+
+                    # if we reach the last node
+                    if(last == stackObj.returnHead().prev):
+                        break
+
+                # removing the lastly added nodeSeperator
+                result = result[:(len(nodeSeperator) * -1)]
+
+                if(justReturn):
+                    return result
+                else:
+                    print(result)
+                    return result
+
+            # else simply traversing the linked list
+            else:
+                last = stackObj.returnHead()
+                result = ""
+                
+                # till be reach list end
+                while((last != None)):
+
+                    # adding the node starting string "[ "
+                    if(forNode_start != None):
+                        result = result + forNode_start
+
+                    # adding the elements in last.data list seperated with dataArgs_seperator
+                    for i in last.data:
+                        result = result + str(i) + dataArgs_seperator
+
+                    # removing the lastly added dataArgs_seperator
+                    result = result[:(len(dataArgs_seperator) * -1)]
+
+                    # adding the node end string " ]"
+                    if(forNode_end != None):
+                        result = result + forNode_end
+
+                    # adding the node seperator
+                    result = result + nodeSeperator
+
+                    last = last.next
+
+                    if(last == stackObj.returnHead()):
+                        break
+
+                # removing the lastly added nodeSeperator
+                result = result[:(len(nodeSeperator) * -1)]
+
+                if(justReturn):
+                    return result
+                else:
+                    print(result)
+                    return result
+
+
+
+
+
+
+
+        
 
         
 
@@ -278,14 +558,14 @@ class stackOperations:
 
 
 if __name__ == "__main__":
-    stackObj = StackUsingArray()
+    stackObj = StackUsingLinkedList()
 
     stackObj.push(1)
-    stackObj.push(2)
-    stackObj.push(33)
-    stackObj.push(4)
-    # stackOperations.reverseStack(stackObj)
-    stackOperations.sortStack(stackObj , reverse=True)
+    # stackObj.push(2)
+    # stackObj.push(33)
+    # stackObj.push(4)
+    print(stackOperations.getLength(stackObj))
+    print(stackOperations.quickTraverse(stackObj=stackObj , asAdded=False))
     print(stackObj.pop())
     print(stackObj.pop())
     print(stackObj.pop())
