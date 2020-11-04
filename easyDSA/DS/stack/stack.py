@@ -25,6 +25,13 @@ class StackUsingArray:
             else:
                 return None
 
+    # function to return the data of last element
+    def peek(self):
+        try:
+            return self.stack[-1]
+        except IndexError:
+            return None
+
     # function check if the stack is empty or not 
     def isEmpty(self):
 
@@ -68,6 +75,16 @@ class StackUsingLinkedList:
         # else return data
         return toReturn.data
 
+    # function to return data of the last element
+    def peek(self):
+        toReturn = self.cll.getLastNode()
+
+        # if the stack is empty then return None
+        if(toReturn == None):
+            return None
+
+        # else return data
+        return toReturn.data
 
     # function to check if the stack is empty or not
     def isEmpty(self):
