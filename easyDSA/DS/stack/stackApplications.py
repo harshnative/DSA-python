@@ -142,13 +142,47 @@ class stackApplications:
 
         return result 
 
+    
+
+    # method to evaluate the postfix expression
+    # if more than single digit numbers as to be passed then all the numbers and operands must be seperated by space
+    @classmethod
+    def postfixEvaluator(cls , postfixExpression):
+
+        sll = StackUsingLinkedList()
+
+        # if the multidigit is passed the the expression is converted to a list
+        if(" " in postfixExpression):
+            postfixExpression = postfixExpression.split()
+
+        """ scan 
+            if isnumeric , push
+            elif x = pop , y = pop , eval y (i) x
+        """
+
+        for i in postfixExpression:
+
+            if(i.isnumeric()):
+                sll.push(i)
+
+            else:
+                x = sll.pop()[0]
+                y = sll.pop()[0]
+
+                sll.push(str(eval(y + i + x)))
+
+        return int(sll.pop()[0])
+
+
+
 
 
 
 
 if __name__ == "__main__":
     
-    print(stackApplications.infixToPostfix("(A + B) * (C + D)"))
+    print(stackApplications.infixToPostfix("a + b * c"))
+    print(stackApplications.postfixEvaluator("10 20 30 * +"))
     
 
 
