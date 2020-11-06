@@ -1,4 +1,4 @@
-from stack import StackUsingLinkedList
+from stack import StackUsingLinkedList , stackOperations
 
 class stackApplications:
 
@@ -174,6 +174,59 @@ class stackApplications:
         return int(sll.pop()[0])
 
 
+    # function to get the next greator elements for a array
+    @classmethod
+    def nextGreatorElement(cls , array):
+
+        """
+        Algo - 
+        Push the first element to stack.
+        Pick rest of the elements one by one and follow the following steps in loop.
+            Mark the current element as next.
+            If stack is not empty, compare top element of stack with next.
+            If next is greater than the top element,Pop element from stack. next is the next greater element for the popped element.
+            Keep popping from the stack while the popped element is smaller than next. next becomes the next greater element for all such popped elements
+        Finally, push the next in the stack.
+        After the loop in step 2 is over, pop all the elements from stack and print -1 as next element for them.
+        """
+
+        sll = StackUsingLinkedList()
+
+        resultList = []
+
+        sll.push(array[0])
+
+        for i in array[1:]:
+            next = i
+
+            while(True):
+                if(not(sll.isEmpty())):
+                    if(next > sll.peek()[0]):
+                        resultList.append([sll.pop()[0] , next])
+                    else:
+                        break
+                else:
+                    break
+            
+            sll.push(next)
+
+        while(not(sll.isEmpty())):
+            resultList.append([sll.pop()[0] , -1])
+
+        return resultList
+
+
+
+        
+
+
+
+                
+
+
+
+
+
 
 
 
@@ -181,8 +234,9 @@ class stackApplications:
 
 if __name__ == "__main__":
     
-    print(stackApplications.infixToPostfix("a + b * c"))
-    print(stackApplications.postfixEvaluator("10 20 30 * +"))
+    # print(stackApplications.infixToPostfix("a + b * c"))
+    # print(stackApplications.postfixEvaluator("10 20 30 * +"))
+    print(stackApplications.towerOfHanoi(3))
     
 
 
