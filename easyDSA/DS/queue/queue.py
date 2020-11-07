@@ -13,16 +13,17 @@ class Queue:
 
     # method to get the first element of queue
     def peek(self):
-        if(len(self.queue) > 0):
+        try:
             return self.queue[0]
-        else:
+        except IndexError:
             return None
 
     # method to check whether the queue is empty or not
     def isEmpty(self):
-        if(len(self.queue) > 0):
+        try:
+            self.queue[0]
             return False
-        else:
+        except IndexError:
             return True
 
     # method to remove the first element from queue
@@ -36,7 +37,6 @@ class Queue:
 if __name__ == "__main__":
     
     q = Queue()
-
     q.enqueue(1 , 2)
     q.enqueue(2 , 3)
     q.enqueue(3 , 4)
