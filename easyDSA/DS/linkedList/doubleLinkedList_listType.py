@@ -4,8 +4,12 @@ class Node:
 
     def __init__(self , data , next=None , prev=None):
 
+        temp = []
+        if(type(data) != type(temp)):
+            raise RuntimeError("list argument is excepted as data")
+
         # data list
-        self.data = data
+        self.data = list(data)
 
         # prev pointer
         self.prev = prev
@@ -163,7 +167,7 @@ class DoublyLinkedList:
     
 
     # function to traverse the list
-    def traverseList(self , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+    def traverseList(self , dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
 
         last = self.head
         result = ""
@@ -175,7 +179,12 @@ class DoublyLinkedList:
             if(forNode_start != None):
                 result = result + forNode_start
 
-            result = result + str(last.data)
+            # adding the elements in last.data list seperated with dataArgs_seperator
+            for i in last.data:
+                result = result + str(i) + dataArgs_seperator
+
+            # removing the lastly added dataArgs_seperator
+            result = result[:(len(dataArgs_seperator) * -1)]
 
             # adding the node end string " ]"
             if(forNode_end != None):
@@ -324,7 +333,12 @@ class DoublyLinkedList:
 
             # adding data
             if(start):
-                resultList.append(last.data)
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
             
             # if the pos becomes the toNode Value else list will tarverse till last
             if((pos == toNode) and (toNode != None)):
@@ -380,13 +394,13 @@ class DoublyLinkedList:
 
     
     # function to sort the linked list
-    def sortLinkedList(self , reverse = False):
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
 
         # conv the linked list to python normal list
         dataList = self.returnList()
 
         # sorting list
-        dataList.sort()
+        dataList.sort(key = lambda x: x[listPos_reference])
 
         self.deleteEntireList()
 
@@ -399,8 +413,10 @@ class DoublyLinkedList:
 
 
     # function to delete a node by matching the key - deletes the first occurence
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
     # if the startform is passed then traversing will start from their
-    def deleteNodeAtKey(self , key = None , startForm = None):
+    def deleteNodeAtKey(self , keyList = None , key = None , startForm = None):
 
         # for tracking wheather to delete a node or not
         delete = False
@@ -416,8 +432,18 @@ class DoublyLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                delete = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
 
             # if the node is set to be deleted
             if(delete):
@@ -440,7 +466,9 @@ class DoublyLinkedList:
 
 
     # function to delete all node containing the key
-    def deleteAllNodeAtKey(self , key = None):
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    def deleteAllNodeAtKey(self , keyList = None , key = None):
 
         status = True
 
@@ -451,17 +479,17 @@ class DoublyLinkedList:
 
             # node and prev node will be returned by the function 
             # if the none is returned that means no other key is left to delete
-            tillNode = self.deleteNodeAtKey(key , tillNode)
+            tillNode = self.deleteNodeAtKey(keyList , key , tillNode)
 
             # break the loop when the till node is none
             if(tillNode == None):
                 status = False
 
 
-    def getNodeAtKey(self , key = None , startForm = None , allNode = True):
+    def getNodeAtKey(self , keyList = None , key = None , startForm = None , allNode = True):
 
         # for tracking wheather to delete a node or not
-        addData = False
+        delete = False
 
         nodeList = []
 
@@ -476,12 +504,22 @@ class DoublyLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                addData = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
 
             # if the node is set to be deleted
-            if(addData):
-                addData = False
+            if(delete):
+                delete = False
                 if(allNode):
                     nodeList.append(last)
                 else:
@@ -543,7 +581,7 @@ class DoublyLinkedList:
 
     
     # function to delete all the duplicate elements in sorted list
-    def delDuplicateShorted(self):
+    def delDuplicateShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -555,13 +593,16 @@ class DoublyLinkedList:
 
             # if the data matches we delete the next node
             if(last.next.data == last.data):
-                self.deleteNodeAtKey(last.data , startForm=last.next)
+                if(entireData):
+                    self.deleteNodeAtKey(last.data , startForm=last.next)
+                else:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
             else:
                 last = last.next
 
 
     # function to delete all the duplicate elements in unsorted list
-    def delDuplicateUnShorted(self):
+    def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -578,7 +619,10 @@ class DoublyLinkedList:
                 
                 # if the data matches we delete the next node
                 if(temp.next.data == last.data):
-                    self.deleteNodeAtKey(last.data , startForm=last.next)
+                    if(entireData):
+                        self.deleteNodeAtKey(last.data , startForm=last.next)
+                    else:
+                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
                 else:
                     temp = temp.next
 
@@ -595,14 +639,14 @@ class DoublyLinkedList:
 
 def test():
     dll = DoublyLinkedList()
-    dll.insertAtEnd(1 , useCache= True)
-    dll.insertAtEnd(2 , useCache= True)
-    dll.insertAtEnd(3 , useCache= True)
-    dll.insertAtEnd(4 , useCache= True)
-    dll.insertAtFront(5)
-    dll.insertAtFront(6)
-    dll.insertAfterNode(dll.getNodeAtPos(3) , "hello")
-    dll.insertBeforeNode(dll.getNodeAtPos(7) , "hello")
+    dll.insertAtEnd([1 , 'a' ], useCache= True)
+    dll.insertAtEnd([2 , 'b' ], useCache= True)
+    dll.insertAtEnd([3 , 'c' ], useCache= True)
+    dll.insertAtEnd([4 , 'd' ], useCache= True)
+    dll.insertAtFront([5 , 'e'])
+    dll.insertAtFront([6 , 'e'])
+    dll.insertAfterNode(dll.getNodeAtPos(3) , ["hello" , 'e'])
+    dll.insertBeforeNode(dll.getNodeAtPos(7) , ["hello" , 'e'])
     dll.traverseList()
 
     dll.deleteNode(dll.getNodeAtPos(1))
@@ -635,13 +679,13 @@ def test():
     print("\nafter sorting reverse ")
     dll.traverseList()
 
-    dll.insertAtFront(1)
+    dll.insertAtFront([1 , 'a'])
     print("\nafter inserting [1,a]  at start")
     dll.traverseList()
 
-    dll.insertAtEnd(1)
-    dll.insertAtEnd(1)
-    dll.insertAtEnd(1)
+    dll.insertAtEnd([1 , 'a'])
+    dll.insertAtEnd([1 , 'a'])
+    dll.insertAtEnd([1 , 'a'])
     print("\nafter inserting [1,a]  at end")
     dll.traverseList()
 
