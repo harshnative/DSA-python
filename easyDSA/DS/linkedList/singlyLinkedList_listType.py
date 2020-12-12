@@ -607,8 +607,10 @@ class SinglyLinkedList:
             if(last.next.data == last.data):
                 if(entireData):
                     self.deleteNodeAtKey(last.data , startForm=[last.next , last])
-                else:
-                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
+                try:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                except IndexError:
+                    raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
             else:
                 last = last.next
 
@@ -633,8 +635,10 @@ class SinglyLinkedList:
                 if(temp.next.data == last.data):
                     if(entireData):
                         self.deleteNodeAtKey(last.data , startForm=[last.next , last])
-                    else:
-                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
+                    try:
+                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                    except IndexError:
+                        raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
                 else:
                     temp = temp.next
 

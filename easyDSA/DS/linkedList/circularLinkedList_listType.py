@@ -2,7 +2,11 @@
 # Node class
 class Node:
 
-    def __init__(self , data, next=None , prev=None):
+    def __init__(self , data , next=None , prev=None):
+
+        temp = []
+        if(type(data) != type(temp)):
+            raise RuntimeError("list argument is excepted as data")
 
         # data list
         self.data = data
@@ -146,7 +150,7 @@ class CircularLinkedList:
     
 
     # function to traverse the list
-    def traverseList(self , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+    def traverseList(self , dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
 
         last = self.head
         result = ""
@@ -159,7 +163,12 @@ class CircularLinkedList:
             if(forNode_start != None):
                 result = result + forNode_start
 
-            result = result + str(last.data)
+            # adding the elements in last.data list seperated with dataArgs_seperator
+            for i in last.data:
+                result = result + str(i) + dataArgs_seperator
+
+            # removing the lastly added dataArgs_seperator
+            result = result[:(len(dataArgs_seperator) * -1)]
 
             # adding the node end string " ]"
             if(forNode_end != None):
@@ -263,7 +272,12 @@ class CircularLinkedList:
 
             # adding data
             if(start):
-                resultList.append(last.data)
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
             
             # if the pos becomes the toNode Value else list will tarverse till last
             if((pos == toNode) and (toNode != None)):
@@ -337,13 +351,13 @@ class CircularLinkedList:
 
     
        # function to sort the linked list
-    def sortLinkedList(self , reverse = False):
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
 
         # conv the linked list to python normal list
         dataList = self.returnList()
 
         # sorting list
-        dataList.sort()
+        dataList.sort(key = lambda x: x[listPos_reference])
 
         self.deleteEntireList()
 
@@ -356,8 +370,10 @@ class CircularLinkedList:
 
 
     # function to delete a node by matching the key - deletes the first occurence
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
     # if the startform is passed then traversing will start from their
-    def deleteNodeAtKey(self , key = None , startForm = None):
+    def deleteNodeAtKey(self , keyList = None , key = None , startForm = None):
 
         # for tracking wheather to delete a node or not
         delete = False
@@ -375,8 +391,18 @@ class CircularLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                delete = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
 
             # if the node is set to be deleted
             if(delete):
@@ -394,7 +420,9 @@ class CircularLinkedList:
 
 
     # function to delete all node containing the key
-    def deleteAllNodeAtKey(self , key = None):
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
+    def deleteAllNodeAtKey(self , keyList = None , key = None):
 
         status = True
 
@@ -405,14 +433,14 @@ class CircularLinkedList:
 
             # node and prev node will be returned by the function 
             # if the none is returned that means no other key is left to delete
-            tillNode = self.deleteNodeAtKey(key , tillNode)
+            tillNode = self.deleteNodeAtKey(keyList , key , tillNode)
             
             # break the loop when the till node is none
             if(tillNode == None):
                 status = False
 
 
-    def getNodeAtKey(self , key = None , startForm = None , allNode = True):
+    def getNodeAtKey(self , keyList = None , key = None , startForm = None , allNode = True):
 
         # for tracking wheather to delete a node or not
         delete = False
@@ -430,8 +458,18 @@ class CircularLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                delete = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
 
             # if the node is set to be deleted
             if(delete):
@@ -472,7 +510,7 @@ class CircularLinkedList:
 
 
      # function to delete all the duplicate elements in sorted list
-    def delDuplicateShorted(self):
+    def delDuplicateShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -484,7 +522,12 @@ class CircularLinkedList:
 
             # if the data matches we delete the next node
             if(last.next.data == last.data):
-                self.deleteNodeAtKey(last.data , startForm=last.next)
+                if(entireData):
+                    self.deleteNodeAtKey(last.data , startForm=last.next)
+                try:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                except IndexError:
+                    raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
             
             else:
                 last = last.next
@@ -494,7 +537,7 @@ class CircularLinkedList:
 
 
     # function to delete all the duplicate elements in unsorted list
-    def delDuplicateUnShorted(self):
+    def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -511,7 +554,13 @@ class CircularLinkedList:
                 
                 # if the data matches we delete the next node
                 if(temp.next.data == last.data):
-                    self.deleteNodeAtKey(last.data , startForm=last.next)
+                    if(entireData):
+                        self.deleteNodeAtKey(last.data , startForm=last.next)
+                    else:
+                        try:
+                            self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                        except IndexError:
+                            raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
                 else:
                     temp = temp.next
 
@@ -558,27 +607,27 @@ def test():
     cll = CircularLinkedList()
 
     print("1")
-    cll.insertAtEnd(1)
+    cll.insertAtEnd([1 , 'a'])
     cll.traverseList()
 
     print("\n2")
-    cll.insertAtEnd(2)
+    cll.insertAtEnd([2 , 'b'])
     cll.traverseList()
 
     print("\n3")
-    cll.insertAtEnd(3)
+    cll.insertAtEnd([3 , 'c'])
     cll.traverseList()
 
     print("\n4")
-    cll.insertAtEnd(4)
+    cll.insertAtEnd([4 , 'd'])
     cll.traverseList()
 
     print("\n5")
-    cll.insertAtFront(5)
+    cll.insertAtFront([5 , 'e'])
     cll.traverseList()
 
     print("\n6")
-    cll.insertAtFront(6)
+    cll.insertAtFront([6 , 'e'])
     cll.traverseList()
 
     # print("\n7")
@@ -614,16 +663,16 @@ def test():
 
 
     print("\n14")
-    cll.insertAtFront(1)
+    cll.insertAtFront([1 , 'a'])
     cll.traverseList()
 
 
     print("\n15")
-    cll.insertAtEnd(1)
+    cll.insertAtEnd([1 , 'a'])
     cll.traverseList()
 
     print("\n15")
-    cll.insertAfterNode( cll.getNodeAtPos(4) ,  1)
+    cll.insertAfterNode( cll.getNodeAtPos(4) ,  [1 , 'b'])
     cll.traverseList()
 
     # print("\n13")
@@ -631,7 +680,7 @@ def test():
     # cll.traverseList()
 
     print("\n15")
-    cll.delDuplicateUnShorted()
+    cll.delDuplicateUnShorted(False , 2)
     cll.traverseList()
 
 
