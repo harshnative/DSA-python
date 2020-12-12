@@ -313,7 +313,7 @@ class SinglyLinkedList:
 
         
     # function to delete all node containing the key
-    def deleteAllNodeAtKey(self , keyList = None , key = None):
+    def deleteAllNodeAtKey(self , key = None):
 
         status = True
 
@@ -366,7 +366,7 @@ class SinglyLinkedList:
 
 
     
-    # fucntion for deleting the node at a certain position
+    # function for deleting the node at a certain position
     # position starts from 1 
     def deleteNodeAtPos(self , pos):
 

@@ -635,10 +635,11 @@ class SinglyLinkedList:
                 if(temp.next.data == last.data):
                     if(entireData):
                         self.deleteNodeAtKey(last.data , startForm=[last.next , last])
-                    try:
-                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
-                    except IndexError:
-                        raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
+                    else:
+                        try:
+                            self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=last.next)
+                        except IndexError:
+                            raise IndexError("list index out of range - keep in mind : position is considered like index here , starting form zero")
                 else:
                     temp = temp.next
 
