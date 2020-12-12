@@ -528,17 +528,12 @@ class SinglyLinkedList:
 
     
     # function to sort the linked list
-    def sortLinkedList(self , normal = True ,  listPos_reference = 0 , reverse = False):
+    def sortLinkedList(self , reverse = False):
 
         # conv the linked list to python normal list
         dataList = self.returnList()
 
-        if(normal):
-            dataList.sort()
-
-        else:
-            # sorting list
-            dataList.sort(key = lambda x: x[listPos_reference])
+        dataList.sort()
 
         self.deleteEntireList()
 
