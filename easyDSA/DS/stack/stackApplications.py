@@ -236,7 +236,7 @@ if __name__ == "__main__":
     
     # print(stackApplications.infixToPostfix("a + b * c"))
     # print(stackApplications.postfixEvaluator("10 20 30 * +"))
-    print(stackApplications.towerOfHanoi(3))
+    print(stackApplications.infixToPostfix("(A – B) / (C * D) ^ (E + F * G)"))
     
 
 

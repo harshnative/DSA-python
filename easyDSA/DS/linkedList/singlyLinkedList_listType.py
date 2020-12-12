@@ -1,9 +1,12 @@
 
-
 # Node class
 class Node:
 
     def __init__(self , data):
+
+        temp = []
+        if(type(data) != type(temp)):
+            raise RuntimeError("list argument is excepted as data")
 
         # data list
         self.data = data
@@ -161,7 +164,7 @@ class SinglyLinkedList:
 
 
     # function to traverse the list
-    def traverseList(self , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
+    def traverseList(self , dataArgs_seperator = " , " , nodeSeperator = " -> " , justReturn = False , forNode_start="[ " , forNode_end = " ]"):
 
         last = self.head
         result = ""
@@ -173,8 +176,12 @@ class SinglyLinkedList:
             if(forNode_start != None):
                 result = result + forNode_start
 
-            # adding data
-            result = result + str(last.data)
+            # adding the elements in last.data list seperated with dataArgs_seperator
+            for i in last.data:
+                result = result + str(i) + dataArgs_seperator
+
+            # removing the lastly added dataArgs_seperator
+            result = result[:(len(dataArgs_seperator) * -1)]
 
             # adding the node end string " ]"
             if(forNode_end != None):
@@ -244,7 +251,12 @@ class SinglyLinkedList:
 
             # adding data
             if(start):
-                resultList.append(last.data)
+                tempList = []
+
+                for i in last.data:
+                    tempList.append(i)
+
+                resultList.append(tempList)
             
             # if the pos becomes the toNode Value else list will tarverse till last
             if((pos == toNode) and (toNode != None)):
@@ -263,9 +275,11 @@ class SinglyLinkedList:
 
     
     # function to delete a node by matching the key - deletes the first occurence
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
     # if the startform is passed then traversing will start from their
     # start is a list type containing the node and the prev node -> [currentNode , prevNode]
-    def deleteNodeAtKey(self , key = None , startForm = None):
+    def deleteNodeAtKey(self , keyList = None , key = None , startForm = None):
 
         # for tracking the prev node
         prev = None
@@ -285,8 +299,18 @@ class SinglyLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                delete = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need to delete this node
+                for i in last.data:
+                    if(i == key):
+                        delete = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    delete = True
 
             # if the node is set to be deleted
             if(delete):
@@ -313,6 +337,8 @@ class SinglyLinkedList:
 
         
     # function to delete all node containing the key
+    # if the keylist is passed then it will matched against the data list
+    # if the key is passed then if the data list contains that key is checked 
     def deleteAllNodeAtKey(self , keyList = None , key = None):
 
         status = True
@@ -324,7 +350,7 @@ class SinglyLinkedList:
 
             # node and prev node will be returned by the function 
             # if the none is returned that means no other key is left to delete
-            tillNode = self.deleteNodeAtKey(key , tillNode)
+            tillNode = self.deleteNodeAtKey(keyList , key , tillNode)
 
             # break the loop when the till node is none
             if(tillNode == None):
@@ -417,7 +443,7 @@ class SinglyLinkedList:
 
 
     # function to return the node containing certain key
-    def getNodeAtKey(self , key = None , startForm = None):
+    def getNodeAtKey(self , keyList = None , key = None , startForm = None):
 
         # for tracking wheather to return a node or not
         returnNode = False
@@ -432,8 +458,18 @@ class SinglyLinkedList:
         # till be reach list end
         while(last != None):
             
-            if(last.data == key):
-                returnNode = True
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need return this node
+                for i in last.data:
+                    if(i == key):
+                        returnNode = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    returnNode = True
 
             # if the node is set to be returned
             if(returnNode):
@@ -448,7 +484,7 @@ class SinglyLinkedList:
         return None
 
         
-    def getAllNodeAtKey(self , key = None , startForm = None):
+    def getAllNodeAtKey(self , keyList = None , key = None , startForm = None):
 
         # for tracking wheather to return a node or not
         returnNode = False
@@ -465,9 +501,19 @@ class SinglyLinkedList:
 
         # till be reach list end
         while(last != None):
-
-            if(last.data == key):
-                returnNode == True 
+            
+            # if the key list is none then we check for the element in the data list
+            if(keyList == None):
+                
+                # if the elment is found the we need return this node
+                for i in last.data:
+                    if(i == key):
+                        returnNode = True
+            
+            # if the key list is passed then we have to match it to the list
+            else:
+                if(last.data == keyList):
+                    returnNode = True
 
             # if the node is set to be returned
             if(returnNode):
@@ -528,17 +574,13 @@ class SinglyLinkedList:
 
     
     # function to sort the linked list
-    def sortLinkedList(self , normal = True ,  listPos_reference = 0 , reverse = False):
+    def sortLinkedList(self , listPos_reference = 0 , reverse = False):
 
         # conv the linked list to python normal list
         dataList = self.returnList()
 
-        if(normal):
-            dataList.sort()
-
-        else:
-            # sorting list
-            dataList.sort(key = lambda x: x[listPos_reference])
+        # sorting list
+        dataList.sort(key = lambda x: x[listPos_reference])
 
         self.deleteEntireList()
 
@@ -551,7 +593,7 @@ class SinglyLinkedList:
 
     
     # function to delete all the duplicate elements in sorted list
-    def delDuplicateShorted(self):
+    def delDuplicateShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -563,13 +605,16 @@ class SinglyLinkedList:
 
             # if the data matches we delete the next node
             if(last.next.data == last.data):
-                self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                if(entireData):
+                    self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                else:
+                    self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
             else:
                 last = last.next
 
 
     # function to delete all the duplicate elements in unsorted list
-    def delDuplicateUnShorted(self):
+    def delDuplicateUnShorted(self , entireData = True , specificPosInData = None):
 
         last = self.head
 
@@ -586,7 +631,10 @@ class SinglyLinkedList:
                 
                 # if the data matches we delete the next node
                 if(temp.next.data == last.data):
-                    self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                    if(entireData):
+                        self.deleteNodeAtKey(last.data , startForm=[last.next , last])
+                    else:
+                        self.deleteNodeAtKey(key=last.data[specificPosInData] , startForm=[last.next , last])
                 else:
                     temp = temp.next
 
@@ -650,25 +698,25 @@ class SinglyLinkedList:
 def test():
     sll = SinglyLinkedList()
 
-    sll.insertAtEnd(1)
-    sll.insertAtEnd(2)
-    sll.insertAtEnd(3)
-    sll.insertAtEnd(4)
-    sll.insertAtEnd(5)
-    sll.insertAtFront(0.5)
+    sll.insertAtEnd([1 , "a"])
+    sll.insertAtEnd([2 , "b"])
+    sll.insertAtEnd([3 , "c"])
+    sll.insertAtEnd([4 , "d"])
+    sll.insertAtEnd([5 , "e"])
+    sll.insertAtFront([0.5 , "f"])
 
     print("first linked list = \n")
     sll.traverseList()
 
     sll1 = SinglyLinkedList()
 
-    sll1.insertAtEnd(1)
-    sll1.insertAtEnd(2)
-    sll1.insertAtEnd(3)
-    sll1.insertAfterNode(sll1.getNodeAtPos(2) , 2.5)
-    sll1.insertAtEnd(4)
-    sll1.insertAtEnd(5)
-    sll1.insertAtFront(0.5)
+    sll1.insertAtEnd([1])
+    sll1.insertAtEnd([2])
+    sll1.insertAtEnd([3])
+    sll1.insertAfterNode(sll1.getNodeAtPos(2) , [2.5])
+    sll1.insertAtEnd([4])
+    sll1.insertAtEnd([5])
+    sll1.insertAtFront([0.5 , "f"])
 
     print("\nsecond linked list = \n")
     sll1.traverseList()
@@ -679,39 +727,39 @@ def test():
     print("\n second list form  2 to 5\n")
     print(sll1.returnList(2 , 5))
 
-    print("\n deleting 0.5 from list\n")
-    sll1.deleteNodeAtKey(0.5)
+    print("\n deleting [0.5 , f] from list\n")
+    sll1.deleteNodeAtKey(keyList=[0.5 , "f"])
     sll1.traverseList()
 
-    print("\n List after adding 0.6\n")
-    sll1.insertAtFront(0.6)
+    print("\n List after adding [0.6 , 'h']\n")
+    sll1.insertAtFront([0.6 , "h"])
     sll1.traverseList()
 
     print("\n deleting node containing 0.6  from list\n")
-    sll1.deleteNodeAtKey(0.6)
+    sll1.deleteNodeAtKey(key=0.6)
     sll1.traverseList()
 
     print("\n List after adding 2 at front\n")
-    sll1.insertAtFront(2)
+    sll1.insertAtFront([2])
     sll1.traverseList()
 
     print("\n List after adding 3 2's at end\n")
-    sll1.insertAtEnd(2)
-    sll1.insertAtEnd(2)
-    sll1.insertAtEnd(2)
+    sll1.insertAtEnd([2])
+    sll1.insertAtEnd([2])
+    sll1.insertAtEnd([2])
     sll1.traverseList()
 
     print("\n List after adding 3 2's at front\n")
-    sll1.insertAtFront(2)
-    sll1.insertAtFront(2)
-    sll1.insertAtFront(2)
+    sll1.insertAtFront([2])
+    sll1.insertAtFront([2])
+    sll1.insertAtFront([2])
     sll1.traverseList()
 
     print("\n List after adding 3 2's at after 2.5\n")
     pos = sll1.getNodeAtPos(7)
-    sll1.insertAfterNode(pos , 2)
-    sll1.insertAfterNode(pos , 2)
-    sll1.insertAfterNode(pos , 2)
+    sll1.insertAfterNode(pos , [2])
+    sll1.insertAfterNode(pos , [2])
+    sll1.insertAfterNode(pos , [2])
     sll1.traverseList()
 
     print("\n after removing all duplicate elements")
