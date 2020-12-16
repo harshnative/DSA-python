@@ -590,7 +590,7 @@ class CircularLinkedList:
 
         self.deleteNodeAtPos(1)
 
-        self.insertAtEnd(*temp.data)
+        self.insertAtEnd(temp.data)
 
 
 
@@ -680,7 +680,7 @@ def test():
     # cll.traverseList()
 
     print("\n15")
-    cll.delDuplicateUnShorted(False , 2)
+    cll.delDuplicateUnShorted(False , 1)
     cll.traverseList()
 
 

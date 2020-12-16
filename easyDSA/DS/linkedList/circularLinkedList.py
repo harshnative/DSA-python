@@ -541,7 +541,7 @@ class CircularLinkedList:
 
         self.deleteNodeAtPos(1)
 
-        self.insertAtEnd(*temp.data)
+        self.insertAtEnd(temp.data)
 
 
 
