@@ -1,3 +1,5 @@
+from os import stat_result
+from typing import final
 from stack import StackUsingLinkedList , stackOperations
 
 class stackApplications:
@@ -44,111 +46,12 @@ class stackApplications:
         return None
 
 
+    
     # method to convert the infix expression to post fix expression
     @classmethod
     def infixToPostfix(cls , infixExpression):
 
-        # expression should have balanced parenthesis
-        if(cls.balancedParanthesis(infixExpression) != None):
-            raise Exception("invalid expression passed , parenthesis are not balanced")
-
-
-
-        """ scan from left to right
-            if operand , output it
-
-            else
-
-                if stack empty push it
-                elif top of stack is "(" then push it
-                elif scanned = "("
-                elif scanned = ")" , pop until "(" and remove both bracket
-                elif precedence order of scanned is greator than predence order of peek() , push it
-                else  while stack is not empty - peek - if peek = "(" break , elif precedence of peek is greator than or equal to predence of scanned pop() and output
-
-            empty stack  
-        """
-
-        sll = StackUsingLinkedList()
-
-        result = ""
-
-        # presedence order of opeartors
-        precedence = {'+' : 1 , 
-                      '-' : 1 ,
-                      '*' : 2 ,
-                      '/' : 2 , 
-                      '^' : 3 ,}
-
-
-        for i in infixExpression:
-
-            # if operand
-            if((precedence.get(i , None) == None) and (i != "(") and (i != ")")):
-                result = result + i + " "
-            
-            else:
-
-                if(sll.isEmpty()):
-                    sll.push(i)
-                
-                # if stack top is "("
-                elif(sll.peek() == "("):
-                    sll.push(i)
-
-                elif(i ==  "("):
-                    sll.push(i)
-
-                # pop till "(" is encountered 
-                elif(i ==  ")"):
-                    
-                    while(not(sll.isEmpty())):
-                        
-                        data = sll.peek()
-                        
-                        if(data == "("):
-
-                            # as the "(" is to be also removed
-                            sll.pop()
-                            break
-
-                        result = result + str(data) + " "
-
-                        sll.pop()
-
-                elif(precedence.get(i) > precedence.get(sll.peek())):
-                    sll.push(i)
-                
-                else:
-
-                    while(not(sll.isEmpty())):
-                        
-                        data = sll.peek()
-
-                        if(data == "("):
-                            break
-
-                        elif(precedence.get(data) >= precedence.get(i)):
-
-                            result = result + data + " "
-
-                            sll.pop()
-                        
-                        else:
-                            break
-
-                    sll.push(i)
-
-        while(not(sll.isEmpty())):
-            result = result + sll.pop() + " "
-
-        return result 
-
-
-    
-    # method to convert the infix expression to post fix expression
-    @classmethod
-    def infixToPostfix2(cls , infixExpression):
+        infixExpression = cls.expCorrector(infixExpression)
 
         # expression should have balanced parenthesis
         if(cls.balancedParanthesis(infixExpression) != None):
@@ -184,10 +87,6 @@ class stackApplications:
 
             
         infixExpression = infixExpression.split(" ")
-
-        print(infixExpression)
-        input()
-
 
         for i in infixExpression:
 
@@ -271,8 +170,6 @@ class stackApplications:
         """
 
         for i in postfixExpression:
-            stackOperations.traverse(sll)
-
             # if the string is decimal or floating point number
             if((i.isdecimal()) or (i.replace('.', '', 1).isdigit())):
                 sll.push(i)
@@ -281,63 +178,84 @@ class stackApplications:
                 x = sll.pop()
                 y = sll.pop()
 
+                if(i == '^'):
+                    i = "**"
+
                 sll.push(str(eval(y + i + x)))
 
         return float(sll.pop())
 
 
+    
     # method to convert the infix expression to prefix expression
     @classmethod
     def infixToPrefix(cls , infixExpression):
+        
+        # reversing infix expression
+        infixExpression = cls.expCorrector(infixExpression)
+
+        infixExpression = infixExpression.split(" ")
 
         result = ""
 
         for i in infixExpression[::-1]:
-
             if(i == "("):
                 result = result + ")"
             elif(i == ")"):
                 result = result + "("
             else:
-                result = result + str(i)
+                result = result + i
 
-        tempExp = cls.infixToPostfix(result)
+        # converting to postfix
+        result = cls.infixToPostfix(result)
 
-        postfixExp = tempExp[::-1]
+        # again inversing result
+        result = result.split(" ")
 
-        return postfixExp
+        finalResult = ""
+
+        for i in result[::-1]:
+            finalResult = finalResult + i + " "
+
+        return finalResult
+
+        
 
 
-    
-    # method to convert the infix expression to prefix expression
+
+
     @classmethod
-    def infixToPrefix2(cls , infixExpression):
+    def expCorrector(cls , expression):
 
+        # removing every pre space from string
+        tempResult = ""
+        for i in expression:
+            if(i != " "):
+                tempResult = tempResult + i
+
+        # space will be added before and after operand
+        # but ( only before and ) only after space 
         result = ""
 
-        infixExpression = infixExpression.split(" ")
+        operandlist = ['+' , '-' , '/' , '*' , '^']
 
-        for i in infixExpression[::-1]:
+        seperate = False
 
-            if(i == "("):
-                result = result + ")" + " "
+        for i in tempResult:
+            if(i in operandlist):
+                seperate = True
+
+            if(seperate):
+                result = result + " " + i + " "
+                seperate = False
+            elif(i == "("):
+                result = result + i + " "
             elif(i == ")"):
-                result = result + "(" + " "
+                result = result + " " + i
             else:
-                result = result + str(i) + " "
+                result = result + i
 
-        tempExp = cls.infixToPostfix(result)
-
-        tempExp = tempExp.split(" ")
-
-        postfixExp = ""
-
-        for i in tempExp[::-1]:
-            if(i != ""):
-                postfixExp = postfixExp + str(i) + " "
-
-        return postfixExp
-
+        return result
 
 
 
@@ -360,10 +278,9 @@ class stackApplications:
 
 if __name__ == "__main__":
     # print(stackApplications.balancedParanthesis("[[()]"))
-    print(stackApplications.infixToPostfix2("7 ^ 2 * ( 25 + 10 / 5 ) - 13"))
-    print(stackApplications.postfixEvaluator("7 2 ^ 25 10 5 / + * 13 -"))
-    # print(stackApplications.infixToPostfix("(A – B) / (C * D) ^ (E + F * G)"))
-    # print(stackApplications.infixToPrefix2("78 + ( 30 - 0.5 ( 28 + 8 ) ) / 6"))
+    # print(stackApplications.postfixEvaluator("7 2 ^ 25 10 5 / + * 13 -"))
+    # print(stackApplications.postfixEvaluator(stackApplications.infixToPostfix("2*20/2+(3+4)*3^2-6+15")))
+    print(stackApplications.infixToPrefix("78+(30-0.5*(28+8))/6"))
     
 
 
