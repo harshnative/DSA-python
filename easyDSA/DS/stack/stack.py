@@ -61,8 +61,8 @@ class StackUsingLinkedList:
             return False
 
     # function to return the head so that more operations can be performed
-    def returnHead(self):
-        return self.cll.returnHead()
+    def returnObj(self):
+        return self.cll
 
 
 
@@ -121,8 +121,8 @@ class StackUsingLinkedList_listType:
             return False
 
     # function to return the head so that more operations can be performed
-    def returnHead(self):
-        return self.cll.returnHead()
+    def returnObj(self):
+        return self.cll
 
 
 
@@ -148,7 +148,7 @@ class stackOperations:
         while(not(stackObj.isEmpty())):
             stack.append(stackObj.pop())
 
-        stack.sort(reverse = reverse)
+        stack.sort(reverse = not(reverse))
 
         for i in stack:
             stackObj.push(i)
@@ -164,7 +164,7 @@ class stackOperations:
         while(not(stackObj.isEmpty())):
             stack.append(stackObj.pop())
 
-        stack.sort(key = lambda x: x[listPos_reference] ,  reverse = reverse)
+        stack.sort(key = lambda x: x[listPos_reference] ,  reverse = not(reverse))
 
         for i in stack:
             stackObj.push(i)
@@ -300,27 +300,27 @@ class stackOperations:
 
 
 if __name__ == "__main__":
-    # stackObj = StackUsingLinkedList_listType()
-    stackObj = StackUsingLinkedList()
+    stackObj = StackUsingLinkedList_listType()
+    # stackObj = StackUsingLinkedList()
 
-    # stackObj.push([1 , 11])
-    # stackObj.push([2 , 22])
-    # stackObj.push([33 , 333])
-    # stackObj.push([4 , 44])
-
-
-
-    stackObj.push(1)
-    stackObj.push(2)
-    stackObj.push(33)
-    stackObj.push(4)
+    stackObj.push([1 , 11])
+    stackObj.push([2 , 22])
+    stackObj.push([33 , 333])
+    stackObj.push([4 , 44])
 
 
 
+    # stackObj.push(1)
+    # stackObj.push(2)
+    # stackObj.push(33)
+    # stackObj.push(4)
 
-    # stackOperations.sortStack_listType(stackObj)
+
+
+
+    stackOperations.sortStack(stackObj , reverse=True)
     print("stack length = " , stackOperations.getLength(stackObj))
-    stackOperations.traverse(stackObj , listType = False , reverse=False)
+    stackOperations.traverse(stackObj , listType = True , reverse=False)
     print(stackObj.pop())
     print(stackObj.pop())
     print(stackObj.pop())

@@ -1,5 +1,3 @@
-from os import stat_result
-from typing import final
 from stack import StackUsingLinkedList , stackOperations
 
 class stackApplications:
@@ -219,10 +217,40 @@ class stackApplications:
 
         return finalResult
 
+
+    @classmethod
+    def prefixEvaluator(cls , prefixExpression):
         
+        # if the multidigit is passed the the expression is converted to a list
+        if(" " in prefixExpression):
+            prefixExpression = prefixExpression.split()
+
+        sll = StackUsingLinkedList()
+
+        for i in prefixExpression[::-1]:
+            
+            # if the string is decimal or floating point number
+            if((i.isdecimal()) or (i.replace('.', '', 1).isdigit())):
+                sll.push(i)
+
+            else:
+                x = sll.pop()
+                y = sll.pop()
+
+                if(i == '^'):
+                    i = "**"
+
+                sll.push(str(eval(x + i + y)))
+
+
+        return float(sll.pop())
 
 
 
+
+    # TODO: infix evaluator
+
+        
 
     @classmethod
     def expCorrector(cls , expression):
@@ -278,9 +306,10 @@ class stackApplications:
 
 if __name__ == "__main__":
     # print(stackApplications.balancedParanthesis("[[()]"))
-    # print(stackApplications.postfixEvaluator("7 2 ^ 25 10 5 / + * 13 -"))
+    print(stackApplications.postfixEvaluator("78 30 0.5 28 8 + * - 6 / +"))
     # print(stackApplications.postfixEvaluator(stackApplications.infixToPostfix("2*20/2+(3+4)*3^2-6+15")))
-    print(stackApplications.infixToPrefix("78+(30-0.5*(28+8))/6"))
+    # print(stackApplications.infixToPrefix("78+(30-0.5*(28+8))/6"))
+    print(stackApplications.prefixEvaluator("+ 78 / - 30 * 0.5 + 28 8 6"))
     
 
 
