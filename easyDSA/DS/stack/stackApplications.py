@@ -1,6 +1,6 @@
 from stack import StackUsingLinkedList , stackOperations
 
-class stackApplications:
+class StackApplications:
 
     # method to check for balanced paranthesis
     @classmethod
@@ -244,12 +244,6 @@ class stackApplications:
 
 
         return float(sll.pop())
-
-
-
-
-    # TODO: infix evaluator
-
         
 
     @classmethod
@@ -305,11 +299,11 @@ class stackApplications:
 
 
 if __name__ == "__main__":
-    # print(stackApplications.balancedParanthesis("[[()]"))
-    print(stackApplications.postfixEvaluator("78 30 0.5 28 8 + * - 6 / +"))
-    # print(stackApplications.postfixEvaluator(stackApplications.infixToPostfix("2*20/2+(3+4)*3^2-6+15")))
-    # print(stackApplications.infixToPrefix("78+(30-0.5*(28+8))/6"))
-    print(stackApplications.prefixEvaluator("+ 78 / - 30 * 0.5 + 28 8 6"))
+    # print(StackApplications.balancedParanthesis("[[()]"))
+    print(StackApplications.postfixEvaluator("78 30 0.5 28 8 + * - 6 / +"))
+    # print(StackApplications.postfixEvaluator(StackApplications.infixToPostfix("2*20/2+(3+4)*3^2-6+15")))
+    # print(StackApplications.infixToPrefix("78+(30-0.5*(28+8))/6"))
+    print(StackApplications.prefixEvaluator("+ 78 / - 30 * 0.5 + 28 8 6"))
     
 
 
