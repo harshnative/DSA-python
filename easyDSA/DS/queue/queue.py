@@ -27,6 +27,21 @@ class Queue:
 
         return toReturn.data
 
+    def removeEnd(self , returnNone = True):
+        toReturn = self.cll.getLastNode()
+
+        # if the queue is empty then return None
+        if(toReturn == None):
+            if(returnNone):
+                return None
+            else:
+                raise RuntimeError("dequeue from empty queue")
+
+        self.cll.deleteNode(toReturn)
+
+        return toReturn.data
+
+
     def isEmpty(self):
         toReturn = self.cll.head
 
@@ -63,6 +78,13 @@ class Queue:
 
         # else return data
         return toReturn.data
+    
+
+    # function to return the head so that more operations can be performed
+    def returnObj(self):
+        return self.cll
+
+
 
 class QueueListType:
     def __init__(self):
@@ -73,6 +95,20 @@ class QueueListType:
     
     def dequeue(self , returnNone = True):
         toReturn = self.cll.head
+
+        # if the queue is empty then return None
+        if(toReturn == None):
+            if(returnNone):
+                return None
+            else:
+                raise RuntimeError("dequeue from empty queue")
+
+        self.cll.deleteNode(toReturn)
+
+        return toReturn.data
+
+    def removeEnd(self , returnNone = True):
+        toReturn = self.cll.getLastNode()
 
         # if the queue is empty then return None
         if(toReturn == None):
@@ -122,6 +158,11 @@ class QueueListType:
         return toReturn.data
 
 
+    # function to return the head so that more operations can be performed
+    def returnObj(self):
+        return self.cll
+
+
 
 # class containing some pre build queue opeartion
 class QueueOperations:
@@ -141,7 +182,7 @@ class QueueOperations:
         queue = []
 
         while(not(queueObj.isEmpty())):
-            queue.append(queueObj.enqueue())
+            queue.append(queueObj.dequeue())
 
         queue.sort(reverse = (reverse))
 
