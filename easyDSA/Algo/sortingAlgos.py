@@ -50,6 +50,75 @@ class SortingAlgo:
 
         return outputArr
 
+    
+
+    # method to implement the insertion sort
+    @classmethod
+    def insertionSort(cls , iterator):
+
+        # function to insert a element in sorted array
+        def insertIntoSortedArray(end , iteratorPass , element):
+
+            # looping in backward direction from end element - index till the array is sorted to 0 with step = -1
+            for i in range(end , -1 , -1):
+
+                # if the arr[i] > element then we need to shift arr[i] to i+1 and insert the element at i
+                # till the arr[i] <= element
+                if(iteratorPass[i] > element):
+
+                    # shift the arr[i] to i + 1
+                    # and as at arr[i+1] is element then simple swap i to i+1 
+                    iteratorPass[i] , iteratorPass[i+1] = iteratorPass[i+1] , iteratorPass[i]
+                else:
+                    break
+            
+        
+        # at first only array at index 0 will be sorted to init end = 0 
+        end = 0
+        lenIterator = len(iterator)
+        
+
+        for i in range(1 , lenIterator):
+
+            # element at i will be inserted into 0 to i-1
+            insertIntoSortedArray(end , iterator , iterator[i])
+            end += 1
+
+        return iterator
+
+    
+    # method to implement the bubble sort
+    @classmethod
+    def bubbleSort(cls , iterator):
+
+        lenIterator = len(iterator)
+
+        # outer loop to run inner loop total of length of iterator times 
+        for i in range(lenIterator):
+
+            swap = False
+
+            # running a loop until end of arr is reached
+            # we minus i each time as slowly arr at last will be sorted containing only larger element , so no need to go their
+            for j in range(lenIterator-i-1):
+
+                # if arr[j] is greator than arr[j+1] the swap both
+                if(iterator[j] > iterator[j+1]):
+                    iterator[j] , iterator[j+1] = iterator[j+1] , iterator[j]
+                    swap = True
+            
+            # if no swap is done it means arr is already sorted out then simply break
+            if(not(swap)):
+                break
+
+        return iterator
+
+
+
+
+
+            
+
 
 
 
@@ -68,7 +137,7 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 
     arr = []
 
-    # generating a array with random number of size arrSize
+    # generating a array with random numbers of size arrSize
     for _ in range(arrSize):
         toAppend = 0
         if(onlyInt):
@@ -84,7 +153,10 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
     
     # sorting the array using algo 
     begin = time.time() 
-    sortedArr = SortingAlgo.countingSort(arr)
+
+    # change the sorting method here
+    sortedArr = SortingAlgo.bubbleSort(arr)
+
     end = time.time() 
     print(f"Total runtime of the program is {end - begin}") 
 
@@ -110,6 +182,11 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
     for i in sortedArr:
         if(largest < i):
             failed = True
+    
+    # comparing result to python inbuilt sorter
+    if(sorted(arr) != sortedArr):
+        failed = True
+
 
     # print result
     if(failed):
@@ -126,7 +203,9 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 
 
 if __name__ == "__main__":
-    testSorting(arrSize=1000000)
+    # arr = [8,7,4,5,6,7,4,1,2]
+    # print(SortingAlgo.bubbleSort(arr))
+    testSorting(arrSize=10000 , onlyInt=True)
             
             
 
