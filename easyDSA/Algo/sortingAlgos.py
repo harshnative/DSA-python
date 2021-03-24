@@ -10,6 +10,19 @@ class SortingAlgo:
     @classmethod
     def countingSort(cls , iterator):
 
+        """
+        Algo - 
+        1. If no element , quit
+        2. find the minimum element in array
+        3. find the maximum element in array
+        4. find range of array as range = max - min + 1 (as range of 10 - 20 is 11 numbers)
+        5. generate a temp array of size range and init every element to 0
+        6. similarly generate a output array 
+
+        7. traverse the array and add 1 to pos = array[i] - min in temp array
+        8. now traverse the temp array and add element = i + min to output array total of tempArray[i] times
+        """
+
         # if their is no element in the iterator then simply return the iterator
         if(len(iterator) == 0):
             return iterator
@@ -52,12 +65,26 @@ class SortingAlgo:
 
     
 
+
     # method to implement the insertion sort
     @classmethod
     def insertionSort(cls , iterator):
 
+        """
+        Algo -
+        1. divide the array into sorted array and unsorted array
+        2. slowly traverse the unsorted array , and insert the element into sorted array
+        3. increase the sorted array size by 1 each time
+        """
+
         # function to insert a element in sorted array
         def insertIntoSortedArray(end , iteratorPass , element):
+
+            """
+            Algo - 
+            1. traverse in opposite direction
+            2. if the current arr[i] in greator than element then swap those two element 
+            """
 
             # looping in backward direction from end element - index till the array is sorted to 0 with step = -1
             for i in range(end , -1 , -1):
@@ -86,10 +113,21 @@ class SortingAlgo:
 
         return iterator
 
+
+
+
     
     # method to implement the bubble sort
     @classmethod
     def bubbleSort(cls , iterator):
+
+        """
+        Algo - 
+        1. run double loop , first from 0 to len
+        2. inner from 0 to len - i as after i all elements are already sorted
+        3. swap if arr[j] > arr[j+1]
+        4. take a swap var to indicate whether the swapping as occur in inner loop or not, if not break outer loop
+        """
 
         lenIterator = len(iterator)
 
@@ -112,6 +150,49 @@ class SortingAlgo:
                 break
 
         return iterator
+
+
+    
+
+    # maethod to implement the selection sort
+    @classmethod
+    def selectionSort(cls , iterator):
+
+        """
+        Algo - 
+        1. take a pos = 0
+        2. find the smallest element in arr and swap(arr[i] , arr[pos])
+        3. increase pos by 1
+        """
+
+        lenIterator = len(iterator)
+
+        # traversing the array
+        for i in range(lenIterator):
+
+            # let the smallest element be arr[i] as before i , all elements are sorted
+            smallest = iterator[i]
+
+            # position of the smallest element
+            pos = i
+
+            # traversing the array from i+1 to end to find the smallest element
+            for j in range(i+1 , lenIterator):
+                if(iterator[j] < smallest):
+
+                    # if smallest element is found , update smallest and its position 
+                    smallest = iterator[j]
+                    pos = j
+
+            # swap the element at pos with arr[i] to insert the smallest element
+            iterator[i] , iterator[pos] = iterator[pos] , iterator[i]
+
+        return iterator
+
+
+
+
+
 
 
 
@@ -155,7 +236,7 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
     begin = time.time() 
 
     # change the sorting method here
-    sortedArr = SortingAlgo.bubbleSort(arr)
+    sortedArr = SortingAlgo.selectionSort(arr)
 
     end = time.time() 
     print(f"Total runtime of the program is {end - begin}") 
@@ -204,8 +285,8 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 
 if __name__ == "__main__":
     # arr = [8,7,4,5,6,7,4,1,2]
-    # print(SortingAlgo.bubbleSort(arr))
-    testSorting(arrSize=10000 , onlyInt=True)
+    # print(SortingAlgo.selectionSort(arr))
+    testSorting(arrSize=10000 , onlyInt=False)
             
             
 
