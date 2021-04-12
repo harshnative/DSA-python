@@ -1,6 +1,6 @@
 import random
-import time 
-
+import time
+import os
 
 # main class containing all the algorithms
 class SortingAlgo:
@@ -263,6 +263,116 @@ class SortingAlgo:
 
 
 
+    # method to perform quick sort
+    # if pivot element is 0 then element at low will be used as pivot
+    # if pivot element is 1 then element at high will be used as pivot
+    @classmethod
+    def quickSort(cls , iterator , pivotElement = 0):
+        
+        # if the iterator as only 1 element then it is already sorted
+        if(len(iterator) <= 1):
+            return iterator
+
+
+        # function to place the pivot at right position so that all the elements on left side of pivot are smaller and on right side are greator          
+        def helperHigh(iterator , low , high):
+
+            # taking pivot as last element in iterator
+            pivot = iterator[high]
+
+            # as we are taking last element as pivot so we take i as -1 to were array starts
+            i = low - 1
+
+            # traversing the array passed
+            for j in range(low,high):
+                if(iterator[j] <= pivot):
+                    i = i + 1
+                    iterator[i] , iterator[j] = iterator[j] , iterator[i]
+
+            # placing the pivot
+            iterator[i+1] , iterator[high] = iterator[high] , iterator[i+1]
+            
+            # returning pivot index
+            return i+1
+
+        
+        # function to place the pivot at right position so that all the elements on left side of pivot are smaller and on right side are greator          
+        def helperLow(iterator , low , high):
+
+            i = low+1
+            j = high
+
+            # selecting the pivot
+            pivot = iterator[low]
+
+            # looping till j becomes greator than i
+            while(i<=j):
+                # if the A[i] is less than pivot simply increament i until it is not
+                while(iterator[i]<pivot and i<high):
+                    i = i+1
+
+                # if A[j] is greator than pivot simply decreament j until it is not
+                while(iterator[j]>pivot):
+                    j = j-1
+                
+                # if i < j and above condition it not meat , then swap A[i] , A[j]
+                if(i<j):
+                    iterator[i],iterator[j] = iterator[j],iterator[i]
+                    i = i+1
+                    j = j-1
+                
+                # else increament i 
+                else:
+                    i = i+1
+
+            # in the end swap the pivot at j value to place it at rigth position
+            iterator[low] , iterator[j] = iterator[j] , iterator[low]
+
+            return j
+
+
+        if(pivotElement == 0):
+            helperFunction = helperLow
+        else:
+            helperFunction = helperHigh 
+
+        
+        # function to implement in recursion
+        def performQuickSort(iterator , low , high):
+            if(low < high):
+
+                # dividing the array from pivot
+                pi = helperFunction(iterator , low , high)
+
+                # applying quick sort on divided arrays along pivot
+                performQuickSort(iterator , low , pi-1)
+                performQuickSort(iterator , pi+1 , high)
+
+
+        performQuickSort(iterator , 0 , len(iterator)-1)
+    
+        return iterator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -281,71 +391,84 @@ class SortingAlgo:
 
 
 # function to test the sorting algo's
-def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 10000 , onlyInt = True):
+def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 1000 , onlyInt = True):
     
     # arrSize should be less than 10
     if(arrSize < 10):
         print("array size cannot be less than 10")
         return
 
-    arr = []
+    failedNo = 0
+    avgTime = 0
 
-    # generating a array with random numbers of size arrSize
-    for _ in range(arrSize):
-        toAppend = 0
-        if(onlyInt):
-            toAppend = random.randint(minElement , maxElement)
+    for count in range(repeat):
+        os.system("clear")
+        failed = False
+
+        print("on - ", count)
+        
+        arr = []
+
+        # generating a array with random numbers of size arrSize
+        for _ in range(arrSize):
+            toAppend = 0
+            if(onlyInt):
+                toAppend = random.randint(minElement , maxElement)
+            else:
+                toAppend = random.uniform(float(minElement) , float(maxElement))
+
+            arr.append(toAppend)
+        
+        print("generated array of length = {}\n".format(str(len(arr))))
+
+        
+        # sorting the array using algo 
+        begin = time.time() 
+
+        # change the sorting method here
+        sortedArr = SortingAlgo.quickSort(arr , pivotElement=1)
+
+        end = time.time() 
+        print(f"Total runtime of the loop is {end - begin}")
+        avgTime = avgTime + (end - begin)
+
+        lenSortedArr = len(sortedArr)
+
+        # if the i is found to be greator than i+1 then algo as failed
+        for i in range(lenSortedArr-1):
+            if(sortedArr[i] <= sortedArr[i+1]):
+                pass
+            else:
+                failed = True
+        
+        # if another smallest number is found then algo as failed as in sorted array the smallest number will be at index 0
+        smallest = sortedArr[0]
+        for i in sortedArr:
+            if(smallest > i):
+                failed = True
+
+        # if the another largest number is found then algo is failed
+        largest = sortedArr[-1]
+        for i in sortedArr:
+            if(largest < i):
+                failed = True
+        
+        # comparing result to python inbuilt sorter
+        if(sorted(arr) != sortedArr):
+            failed = True
+
+
+
+        # print result
+        if(failed):
+            print("count failed ..")
+            failedNo = failedNo + 1
         else:
-            toAppend = random.uniform(float(minElement) , float(maxElement))
+            print("count pass successfull")
 
-        arr.append(toAppend)
-    
-    print("generated array of length = {}\n".format(str(len(arr))))
-
-
-    
-    # sorting the array using algo 
-    begin = time.time() 
-
-    # change the sorting method here
-    sortedArr = SortingAlgo.mergeSort(arr)
-
-    end = time.time() 
-    print(f"Total runtime of the program is {end - begin}") 
-
-    lenSortedArr = len(sortedArr)
-
-    failed = False
-
-    # if the i is found to be greator than i+1 then algo as failed
-    for i in range(lenSortedArr-1):
-        if(sortedArr[i] <= sortedArr[i+1]):
-            pass
-        else:
-            failed = True
-    
-    # if another smallest number is found then algo as failed as in sorted array the smallest number will be at index 0
-    smallest = sortedArr[0]
-    for i in sortedArr:
-        if(smallest > i):
-            failed = True
-
-    # if the another largest number is found then algo is failed
-    largest = sortedArr[-1]
-    for i in sortedArr:
-        if(largest < i):
-            failed = True
-    
-    # comparing result to python inbuilt sorter
-    if(sorted(arr) != sortedArr):
-        failed = True
-
-
-    # print result
-    if(failed):
-        print("\n\ntest failed ..\n")
-    else:
-        print("\n\ntest pass successfull\n")
+    os.system("clear")
+    print("test failed number = {}".format(failedNo))
+    print("avgTime = {}".format(avgTime / (repeat-1)))
 
 
 
@@ -356,9 +479,9 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 
 
 if __name__ == "__main__":
-    # arr = [8,7,4,5,6,7,4,1,2]
-    # print(SortingAlgo.mergeSort(arr))
-    testSorting(arrSize=100000 , onlyInt=False)
+    # arr = [5,7,6,9,4,8,1,2,3]
+    # print(SortingAlgo.quickSort(arr))
+    testSorting(arrSize=10000 , onlyInt=False)
             
             
 
