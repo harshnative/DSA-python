@@ -189,6 +189,78 @@ class SortingAlgo:
 
         return iterator
 
+    
+
+
+    # method to implement the merge sort algo
+    @classmethod
+    def mergeSort(cls , iterator):
+
+        # if the length of the iterator <= 1 then it is already sorted
+        if(len(iterator) <= 1):
+            return iterator
+
+        """
+        Algo - 
+        1. divide the array into left and right and recursively call on both left and right
+        2. merging - 
+        i , j , k = 0
+        a) if left[i] < right[j] then iterator[k] = left[i] and i++
+        b) else iterator[k] = right[j] and j++
+        c) k++
+        d) repeat above three till (i < len(left)) and (j < len(right))
+        e) add rest of elements in both i and j to iterator[k] doing k++
+        """
+        
+
+        def performMergeSort(iterator):
+        
+            # exit condition for recursive call
+            if(len(iterator) > 1):
+
+                # dividing the array
+                midPoint = len(iterator)//2
+
+                left = iterator[:midPoint]
+                right = iterator[midPoint:]
+
+                # recursively calling both left and rigth
+                performMergeSort(left)
+                performMergeSort(right)
+
+                i = j = k = 0
+
+                # comparing the left and right element one by one and adding it to iterator[k]
+                while((i < len(left)) and (j < len(right))):
+                    if(left[i] < right[j]):
+                        iterator[k] = left[i]
+                        i = i + 1
+
+                    else:
+                        iterator[k] = right[j]
+                        j = j + 1
+
+                    k = k + 1 
+
+                # adding rest of elements in left array
+                while(i < len(left)):
+                    iterator[k] = left[i]
+                    i += 1
+                    k += 1
+                
+                # adding rest of elements in right array
+                while(j < len(right)):
+                    iterator[k] = right[j]
+                    j += 1
+                    k += 1
+                
+        # calling the inner function to perform merge sort
+        performMergeSort(iterator)
+        
+        # returning the sorted iterator
+        return iterator
+
+
 
 
 
@@ -236,7 +308,7 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
     begin = time.time() 
 
     # change the sorting method here
-    sortedArr = SortingAlgo.selectionSort(arr)
+    sortedArr = SortingAlgo.mergeSort(arr)
 
     end = time.time() 
     print(f"Total runtime of the program is {end - begin}") 
@@ -285,8 +357,8 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 
 if __name__ == "__main__":
     # arr = [8,7,4,5,6,7,4,1,2]
-    # print(SortingAlgo.selectionSort(arr))
-    testSorting(arrSize=10000 , onlyInt=False)
+    # print(SortingAlgo.mergeSort(arr))
+    testSorting(arrSize=100000 , onlyInt=False)
             
             
 
