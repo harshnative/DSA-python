@@ -177,6 +177,15 @@ class BinaryTree:
         # call the finder function
         traverse(currentNode = self.root)
 
+        return self.deleteNode(toDelete , deleteAll , method)
+
+
+
+    # function to delete a node
+    def deleteNode(self , node , deleteAll = True , method = "inorder_predecessor"):
+
+        toDelete = node
+
         # if the node is not found return None
         if(toDelete == None):
             return None
@@ -270,8 +279,36 @@ class BinaryTree:
 
                 del currentNode
 
+        return True
 
 
+    # function to return a node object 
+    def returnNode(self , data):
+        node = None
+
+        # inner recursive function
+        # function to traverse a tree and find the the node to return by comparing the data
+        def traverse(currentNode):
+
+            nonlocal node
+
+            if(currentNode != None):
+                
+                # if the node is found
+                if(currentNode.data == data):
+                    node = currentNode
+                    return
+                else:
+                    traverse(currentNode.left)
+
+                    # if the node is found in left tree then no need to traverse the right tree
+                    if(node == None):
+                        traverse(currentNode.right)
+
+        # call the finder function
+        traverse(currentNode = self.root)
+
+        return node
 
 
 
@@ -308,10 +345,15 @@ if __name__ == "__main__":
     print(obj.postOrderTraversal())
 
     obj.deleteNode_data(11 , method="inorder_successor")
+    obj.deleteNode_data(42 , method="inorder_predecessor")
 
     print()
 
     print(obj.inOrderTraversal())
     print(obj.preOrderTraversal())
     print(obj.postOrderTraversal())
+
+    print()
+
+    print(obj.returnNode(9).parent.data)
 
