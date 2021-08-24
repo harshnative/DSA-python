@@ -83,6 +83,62 @@ class BinaryTree:
 
         return result
 
+
+    
+    # function to do the inoder traversal
+    def preOrderTraversal(self , seperator = " , "):
+        currentRoot = self.root
+        result = ""
+
+        # inner recursive function
+        def traverse(currentNode):
+            nonlocal result
+
+            # we need to print in this way
+            """root , left , rigth"""
+            if(currentNode != None):
+                
+                result = result + str(currentNode.data) + seperator
+
+                traverse(currentNode.left)
+
+                traverse(currentNode.right)
+
+        traverse(currentRoot)
+
+        # remove the last seperator
+        result = result[:len(seperator) * -1]
+
+        return result
+
+    
+    # function to do the inoder traversal
+    def postOrderTraversal(self , seperator = " , "):
+        currentRoot = self.root
+        result = ""
+
+        # inner recursive function
+        def traverse(currentNode):
+            nonlocal result
+
+            # we need to print in this way
+            """left , rigth , root"""
+            if(currentNode != None):
+
+                traverse(currentNode.left)
+
+                traverse(currentNode.right)
+
+                result = result + str(currentNode.data) + seperator
+
+
+        traverse(currentRoot)
+
+        # remove the last seperator
+        result = result[:len(seperator) * -1]
+
+        return result
+
             
 
 
@@ -104,4 +160,6 @@ if __name__ == "__main__":
     obj.insertIntoTree(45)
 
     print(obj.inOrderTraversal())
+    print(obj.preOrderTraversal())
+    print(obj.postOrderTraversal())
 
