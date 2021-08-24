@@ -94,7 +94,7 @@ class BinaryTree:
 
 
     
-    # function to do the inoder traversal
+    # function to do the pre order traversal
     def preOrderTraversal(self , seperator = " , "):
         currentRoot = self.root
         result = ""
@@ -121,7 +121,7 @@ class BinaryTree:
         return result
 
     
-    # function to do the inoder traversal
+    # function to do the post order traversal
     def postOrderTraversal(self , seperator = " , "):
         currentRoot = self.root
         result = ""
@@ -156,45 +156,70 @@ class BinaryTree:
         toDelete = None
 
         # inner recursive function
+        # function to traverse a tree and find the the node to delete by comparing the data
         def traverse(currentNode):
 
             nonlocal toDelete
 
             if(currentNode != None):
                 
+                # if the node is found
                 if(currentNode.data == data):
                     toDelete = currentNode
                     return
                 else:
                     traverse(currentNode.left)
+
+                    # if the node is found in left tree then no need to traverse the right tree
                     if(toDelete == None):
                         traverse(currentNode.right)
 
+        # call the finder function
         traverse(currentNode = self.root)
 
+        # if the node is not found return None
         if(toDelete == None):
             return None
 
+        # if the user does not require to delete the entire node i.e only delete one instance
+        if(not(deleteAll) and (toDelete.frequency > 1)):
+
+            # just decreament the frequency
+            toDelete.frequency = toDelete.frequency - 1
+            return False
+
+        # if the node has 0 child
         if((toDelete.left == None) and (toDelete.right == None)):
+
+            # else delete the entire node
             parent = toDelete.parent
 
+            # set the parent left or rigth to None according to were toDelete is
             if(parent.left == toDelete):
                 parent.left = None
             else:
                 parent.right = None
 
+            # rm node from memory
             del toDelete
 
+        # if the node as  node
         elif((toDelete.left == None) or (toDelete.right == None)):
+            
             parent = toDelete.parent
 
+            # if the parent left is node to delete
             if(parent.left == toDelete):
+
+                # then set the toDelete's child as parent left
                 if(toDelete.left != None):
                     parent.left = toDelete.left
                 else:
                     parent.left = toDelete.right
 
+
             else:
+                # then set the toDelete's child as parent right
                 if(toDelete.left != None):
                     parent.right = toDelete.left
                 else:
@@ -202,44 +227,45 @@ class BinaryTree:
 
             del toDelete
 
+
+        # if the node as two childs
         else:
 
+            # find the largest from left - inorder_predecessor
             if(method == "inorder_predecessor"):
-                largest = None
 
                 currentNode = self.root.left
 
+                # finding the largest from left i.e go to left and then right right right
                 while(currentNode.right != None):
-
-                    largest = currentNode
                     currentNode = currentNode.right
 
-                currentNodeData = currentNode.data
 
+                currentNodeData = currentNode.data
                 currentNodeParent = currentNode.parent
 
+                # remove the largest node from its parent
                 currentNodeParent.right = None
 
+                # copy the largest node data to the node to delete
                 toDelete.data = currentNodeData
 
                 del currentNode
 
             else:
-                smallest = None
-
                 currentNode = self.root.right
 
+                # finding the smallest from right - inorder_successor i.e go to right and then left left left
                 while(currentNode.left != None):
-
-                    largest = currentNode
                     currentNode = currentNode.left
 
                 currentNodeData = currentNode.data
-
                 currentNodeParent = currentNode.parent
 
+                # remove the smallest node from its parent
                 currentNodeParent.left = None
 
+                # copy the smallest node data to the node to delete
                 toDelete.data = currentNodeData
 
                 del currentNode
