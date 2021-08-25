@@ -68,9 +68,9 @@ class BinaryTree:
 
 
     # function to do the inoder traversal
-    def inOrderTraversal(self , seperator = " , "):
+    def inOrderTraversal(self):
         currentRoot = self.root
-        result = ""
+        result = []
 
         # inner recursive function
         def traverse(currentNode):
@@ -81,23 +81,20 @@ class BinaryTree:
             if(currentNode != None):
                 traverse(currentNode.left)
                 
-                result = result + str(currentNode.data) + seperator
+                result.append(currentNode.data)
 
                 traverse(currentNode.right)
 
         traverse(currentRoot)
-
-        # remove the last seperator
-        result = result[:len(seperator) * -1]
 
         return result
 
 
     
     # function to do the pre order traversal
-    def preOrderTraversal(self , seperator = " , "):
+    def preOrderTraversal(self):
         currentRoot = self.root
-        result = ""
+        result = []
 
         # inner recursive function
         def traverse(currentNode):
@@ -107,7 +104,7 @@ class BinaryTree:
             """root , left , right"""
             if(currentNode != None):
                 
-                result = result + str(currentNode.data) + seperator
+                result.append(currentNode.data)
 
                 traverse(currentNode.left)
 
@@ -115,16 +112,13 @@ class BinaryTree:
 
         traverse(currentRoot)
 
-        # remove the last seperator
-        result = result[:len(seperator) * -1]
-
         return result
 
     
     # function to do the post order traversal
-    def postOrderTraversal(self , seperator = " , "):
+    def postOrderTraversal(self):
         currentRoot = self.root
-        result = ""
+        result = []
 
         # inner recursive function
         def traverse(currentNode):
@@ -138,13 +132,10 @@ class BinaryTree:
 
                 traverse(currentNode.right)
 
-                result = result + str(currentNode.data) + seperator
+                result.append(currentNode.data)
 
 
         traverse(currentRoot)
-
-        # remove the last seperator
-        result = result[:len(seperator) * -1]
 
         return result
 
@@ -200,7 +191,6 @@ class BinaryTree:
         # if the node has 0 child
         if((toDelete.left == None) and (toDelete.right == None)):
 
-            # else delete the entire node
             parent = toDelete.parent
 
             # set the parent left or rigth to None according to were toDelete is
@@ -212,7 +202,7 @@ class BinaryTree:
             # rm node from memory
             del toDelete
 
-        # if the node as  node
+        # if the node as 1 node
         elif((toDelete.left == None) or (toDelete.right == None)):
             
             parent = toDelete.parent
@@ -223,16 +213,23 @@ class BinaryTree:
                 # then set the toDelete's child as parent left
                 if(toDelete.left != None):
                     parent.left = toDelete.left
+                    toDelete.left.parent = parent
                 else:
                     parent.left = toDelete.right
+                    toDelete.right.parent = parent
+
 
 
             else:
                 # then set the toDelete's child as parent right
                 if(toDelete.left != None):
                     parent.right = toDelete.left
+                    toDelete.left.parent = parent
+
                 else:
                     parent.right = toDelete.right
+                    toDelete.right.parent = parent
+
 
             del toDelete
 
