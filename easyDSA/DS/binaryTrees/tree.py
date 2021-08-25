@@ -81,7 +81,7 @@ class BinaryTree:
             if(currentNode != None):
                 traverse(currentNode.left)
                 
-                result.append(currentNode.data)
+                result.append(currentNode)
 
                 traverse(currentNode.right)
 
@@ -93,6 +93,79 @@ class BinaryTree:
     
     # function to do the pre order traversal
     def preOrderTraversal(self):
+        currentRoot = self.root
+        result = []
+
+        # inner recursive function
+        def traverse(currentNode):
+            nonlocal result
+
+            # we need to print in this way
+            """root , left , right"""
+            if(currentNode != None):
+                
+                result.append(currentNode)
+
+                traverse(currentNode.left)
+
+                traverse(currentNode.right)
+
+        traverse(currentRoot)
+
+        return result
+
+    
+    # function to do the post order traversal
+    def postOrderTraversal(self):
+        currentRoot = self.root
+        result = []
+
+        # inner recursive function
+        def traverse(currentNode):
+            nonlocal result
+
+            # we need to print in this way
+            """left , right , root"""
+            if(currentNode != None):
+
+                traverse(currentNode.left)
+
+                traverse(currentNode.right)
+
+                result.append(currentNode)
+
+
+        traverse(currentRoot)
+
+        return result
+
+
+    # function to do the inoder traversal
+    def inOrderTraversalData(self):
+        currentRoot = self.root
+        result = []
+
+        # inner recursive function
+        def traverse(currentNode):
+            nonlocal result
+
+            # we need to print in this way
+            """left , root , right"""
+            if(currentNode != None):
+                traverse(currentNode.left)
+                
+                result.append(currentNode.data)
+
+                traverse(currentNode.right)
+
+        traverse(currentRoot)
+
+        return result
+
+
+    
+    # function to do the pre order traversal
+    def preOrderTraversalData(self):
         currentRoot = self.root
         result = []
 
@@ -116,7 +189,7 @@ class BinaryTree:
 
     
     # function to do the post order traversal
-    def postOrderTraversal(self):
+    def postOrderTraversalData(self):
         currentRoot = self.root
         result = []
 
@@ -240,18 +313,25 @@ class BinaryTree:
             # find the largest from left - inorder_predecessor
             if(method == "inorder_predecessor"):
 
-                currentNode = self.root.left
+                currentNode = toDelete.left
+
+                whileLoop = False
 
                 # finding the largest from left i.e go to left and then right right right
                 while(currentNode.right != None):
                     currentNode = currentNode.right
+                    whileLoop = True
 
 
                 currentNodeData = currentNode.data
                 currentNodeParent = currentNode.parent
 
                 # remove the largest node from its parent
-                currentNodeParent.right = None
+                # if we traversed while loop even one time means the smallest node is on right side
+                if(whileLoop):
+                    currentNodeParent.right = None
+                else:
+                    currentNodeParent.left = None
 
                 # copy the largest node data to the node to delete
                 toDelete.data = currentNodeData
@@ -259,17 +339,23 @@ class BinaryTree:
                 del currentNode
 
             else:
-                currentNode = self.root.right
+                currentNode = toDelete.right
+                whileLoop = False
 
                 # finding the smallest from right - inorder_successor i.e go to right and then left left left
                 while(currentNode.left != None):
+                    whileLoop = True
                     currentNode = currentNode.left
 
                 currentNodeData = currentNode.data
                 currentNodeParent = currentNode.parent
 
                 # remove the smallest node from its parent
-                currentNodeParent.left = None
+                # if we traversed while loop even one time means the smallest node is on left side
+                if(whileLoop):
+                    currentNodeParent.left = None
+                else:
+                    currentNodeParent.right = None
 
                 # copy the smallest node data to the node to delete
                 toDelete.data = currentNodeData
@@ -337,20 +423,39 @@ if __name__ == "__main__":
 
 
 
-    print(obj.inOrderTraversal())
-    print(obj.preOrderTraversal())
-    print(obj.postOrderTraversal())
+    print(obj.inOrderTraversalData())
+    print(obj.preOrderTraversalData())
+    print(obj.postOrderTraversalData())
+
+    print()
+
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
+
+    print()
 
     obj.deleteNode_data(11 , method="inorder_successor")
-    obj.deleteNode_data(42 , method="inorder_predecessor")
+    obj.deleteNode_data(9 , method="inorder_predecessor")
+    obj.deleteNode_data(42 , method="")
 
     print()
 
-    print(obj.inOrderTraversal())
-    print(obj.preOrderTraversal())
-    print(obj.postOrderTraversal())
+    print(obj.inOrderTraversalData())
+    print(obj.preOrderTraversalData())
+    print(obj.postOrderTraversalData())
 
     print()
 
-    print(obj.returnNode(9).parent.data)
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
+
+    print()
+
+    print(obj.returnNode(5).parent.data)
 
