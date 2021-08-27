@@ -55,61 +55,82 @@ class AVLTree:
 
         bFactor  = leftH - rightH
 
-        return bFactor
+        return bFactor , leftH , rightH
 
     
 
-    def checkBalanceFactor(self , insertedNode):
+    def checkBalanceFactor(self):
         noneCorrected = True
 
         nodesList = self.inOrderTraversal()
 
         for i in nodesList:
-            bFactor = self.balancingFactorCalc(i)
+            bFactor , leftH , rightH = self.balancingFactorCalc(i)
 
             if(bFactor not in [-1,0,1]):
                 noneCorrected = False
-                self.correctNode(i , insertedNode)
+                self.correctNode(i , leftH , rightH)
 
         return noneCorrected
                 
 
     
-    def correctNode(self , Node , insertedNode):
+    def correctNode(self , Node , leftH , rightH):
 
-        # calculating path to Node from the inserted Node
+        if(leftH > rightH):
+            try:
+                ll = self.maxDepth(Node.left.left)
+                lr = self.maxDepth(Node.left.right)
+                if(ll > lr):
+                    self.llRotation(Node)
+                else:
+                    self.lrRotation(Node)
+            except AttributeError:
+                    self.lrRotation(Node)
 
-        currentNode = insertedNode
-
-        # "left , right"
-        pathList = []
-
-        while(True):
-
-            if(currentNode.parent.left == currentNode):
-                pathList.append("left")
-            else:
-                pathList.append("right")
-
-            currentNode = currentNode.parent
-
-            if(currentNode == Node):
-                break
-
-        pathList.reverse()
-
-        firstTwo = pathList[:2]
-
-        if((firstTwo[0] == "left") and (firstTwo[1] == "left")):
-            self.llRotation(Node)
-        elif((firstTwo[0] == "right") and (firstTwo[1] == "right")):
-            self.rrRotation(Node)
-        elif((firstTwo[0] == "left") and (firstTwo[1] == "right")):
-            self.lrRotation(Node)
-        elif((firstTwo[0] == "right") and (firstTwo[1] == "left")):
-            self.rlRotation(Node)
+            
         else:
-            raise RuntimeError("could not correct node with path = {}".format(pathList))
+            try:
+                rr = self.maxDepth(Node.right.right)
+                rl = self.maxDepth(Node.right.left)
+                if(rr > rl):
+                    self.rrRotation(Node)
+                else:
+                    self.rlRotation(Node)
+            except AttributeError:
+                    self.rlRotation(Node)
+
+
+
+        # # "left , right"
+        # pathList = []
+
+        # while(True):
+
+        #     if(currentNode.parent.left == currentNode):
+        #         pathList.append("left")
+        #     else:
+        #         pathList.append("right")
+
+        #     currentNode = currentNode.parent
+
+        #     if(currentNode == Node):
+        #         break
+
+        # pathList.reverse()
+
+        # firstTwo = pathList[:2]
+
+        # if((firstTwo[0] == "left") and (firstTwo[1] == "left")):
+        #     self.llRotation(Node)
+        # elif((firstTwo[0] == "right") and (firstTwo[1] == "right")):
+        #     self.rrRotation(Node)
+        # elif((firstTwo[0] == "left") and (firstTwo[1] == "right")):
+        #     self.lrRotation(Node)
+        # elif((firstTwo[0] == "right") and (firstTwo[1] == "left")):
+        #     self.rlRotation(Node)
+        # else:
+        #     raise RuntimeError("could not correct node with path = {}".format(pathList))
             
 
 
@@ -145,8 +166,10 @@ class AVLTree:
 
 
     def rrRotation(self , Node):
+
         parent = Node.parent
         rightChild = Node.right
+
 
         if(parent.right == Node):
             parent.right = rightChild
@@ -176,13 +199,14 @@ class AVLTree:
         left_rightChild = Node.left.right
 
         if(parent.left == Node):
+            tempNode = left_rightChild.right
+
             parent.left = left_rightChild
             left_rightChild.parent = parent
 
             left_rightChild.left = leftChild
             leftChild.parent = left_rightChild
 
-            tempNode = left_rightChild.right
             leftChild.right = None
 
             left_rightChild.right = Node
@@ -195,13 +219,14 @@ class AVLTree:
         
         
         elif(parent.right == Node):
+            tempNode = left_rightChild.right
+
             parent.right = left_rightChild
             left_rightChild.parent = parent
 
             left_rightChild.left = leftChild
             leftChild.parent = left_rightChild
 
-            tempNode = left_rightChild.right
             leftChild.right = None
 
             left_rightChild.right = Node
@@ -218,36 +243,38 @@ class AVLTree:
 
     def rlRotation(self , Node):
         parent = Node.parent
-        rightChild = Node.left
-        right_leftChild = Node.left.right
+        rightChild = Node.right
+        right_leftChild = Node.right.left
 
         if(parent.left == Node):
+            tempNode = right_leftChild.right
+
             parent.left = right_leftChild
             right_leftChild.parent = parent
 
             right_leftChild.right = rightChild
             rightChild.parent = right_leftChild
 
-            tempNode = right_leftChild.right
             rightChild.left = None
 
             right_leftChild.left = Node
             Node.parent = right_leftChild
 
             Node.right = tempNode
-            
+
             if(tempNode != None):
                 tempNode.parent = Node
         
         
         elif(parent.right == Node):
+            tempNode = right_leftChild.left
+
             parent.right = right_leftChild
             right_leftChild.parent = parent
 
             right_leftChild.right = rightChild
             rightChild.parent = right_leftChild
 
-            tempNode = right_leftChild.right
             rightChild.left = None
 
             right_leftChild.left = Node
@@ -309,7 +336,7 @@ class AVLTree:
 
             toDoCheck = False
             while(toDoCheck == False):
-                toDoCheck = self.checkBalanceFactor(newNode)
+                toDoCheck = self.checkBalanceFactor()
 
             return True
 
@@ -612,6 +639,9 @@ class AVLTree:
 
                 del currentNode
 
+        toDoCheck = False
+        while(toDoCheck == False):
+            toDoCheck = self.checkBalanceFactor()
         return True
 
 
@@ -671,7 +701,7 @@ if __name__ == "__main__":
     obj.insertIntoTree(16)
     obj.insertIntoTree(20)
 
-
+    print()
 
     for i in obj.inOrderTraversal():
         try:
@@ -679,5 +709,33 @@ if __name__ == "__main__":
         except AttributeError:
             print(i.data , None)
 
-    print(obj.returnNode(16))
+
+    obj.deleteNode_data(8)
+
+    print()
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
+
+
+    obj.deleteNode_data(7)
+
+    print()
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
+
+
+    obj.deleteNode_data(11)
+    print()
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
+
 
