@@ -20,53 +20,58 @@ class AVLTree:
         else:
             self.root = None
 
+
+    def maxDepth(self , node):
+        if node is None:
+            return 0
+    
+        else :
+    
+            # Compute the depth of each subtree
+            lDepth = self.maxDepth(node.left)
+            rDepth = self.maxDepth(node.right)
+    
+            # Use the larger one
+            if (lDepth > rDepth):
+                return lDepth+1
+            else:
+                return rDepth+1
+
     
     def balancingFactorCalc(self , Node):
-        """Balancing factor = heigth of left Tree - heigth of rigth Tree"""
+        """Balancing factor = heigth of left Tree - heigth of right Tree"""
 
         currentNode = Node
 
         leftH = 0
         
-        # calculating left tree heigth - go left left and if left is not available then go right and then again left left till end
-        while(True):
-            if(currentNode.left != None):
-                currentNode = currentNode.left
-                leftH = leftH + 1
-            elif(currentNode.right != None):
-                currentNode = currentNode.right
-                leftH + leftH + 1
-            else:
-                break
+        leftH = self.maxDepth(currentNode.left)
 
         rightH = 0
+        currentNode = Node
 
-        # calculating right tree heigth - go right right and if right is not available then go left and then again right right till end
-        while(True):
-            if(currentNode.right != None):
-                currentNode = currentNode.right
-                rightH = rightH + 1
-            elif(currentNode.left != None):
-                currentNode = currentNode.left
-                rightH + rightH + 1
-            else:
-                break
+        rightH = self.maxDepth(currentNode.right)
 
-        height  = leftH - rightH
 
-        return height
+        bFactor  = leftH - rightH
+
+        return bFactor
 
     
 
     def checkBalanceFactor(self , insertedNode):
+        noneCorrected = True
 
         nodesList = self.inOrderTraversal()
 
         for i in nodesList:
             bFactor = self.balancingFactorCalc(i)
 
-            if(bFactor not in [-1,0,-1]):
+            if(bFactor not in [-1,0,1]):
+                noneCorrected = False
                 self.correctNode(i , insertedNode)
+
+        return noneCorrected
                 
 
     
@@ -110,14 +115,16 @@ class AVLTree:
 
     
     def llRotation(self , Node):
+
         parent = Node.parent
+
         leftChild = Node.left
 
         if(parent.left == Node):
             parent.left = leftChild
             leftChild.parent = parent
 
-            leftChild.rigth = Node
+            leftChild.right = Node
             Node.parent = leftChild
 
             Node.left = None
@@ -159,7 +166,6 @@ class AVLTree:
             Node.parent = rightChild
 
             Node.right = None
-
         else:
             raise RuntimeError("could not perform RR rotation, parent child dispute found")
 
@@ -175,17 +181,17 @@ class AVLTree:
 
             left_rightChild.left = leftChild
             leftChild.parent = left_rightChild
-            Node.left = None
 
             tempNode = left_rightChild.right
+            leftChild.right = None
 
             left_rightChild.right = Node
             Node.parent = left_rightChild
 
-            Node.right = tempNode
+            Node.left = tempNode
             
             if(tempNode != None):
-                tempNode.parent = None
+                tempNode.parent = Node
         
         
         elif(parent.right == Node):
@@ -194,17 +200,17 @@ class AVLTree:
 
             left_rightChild.left = leftChild
             leftChild.parent = left_rightChild
-            Node.left = None
 
             tempNode = left_rightChild.right
+            leftChild.right = None
 
             left_rightChild.right = Node
             Node.parent = left_rightChild
 
-            Node.right = tempNode
+            Node.left = tempNode
             
             if(tempNode != None):
-                tempNode.parent = None
+                tempNode.parent = Node
 
         else:
             raise RuntimeError("could not perform LR rotation, parent child dispute found")
@@ -221,17 +227,17 @@ class AVLTree:
 
             right_leftChild.right = rightChild
             rightChild.parent = right_leftChild
-            Node.right = None
 
-            tempNode = right_leftChild.left
+            tempNode = right_leftChild.right
+            rightChild.left = None
 
             right_leftChild.left = Node
             Node.parent = right_leftChild
 
-            Node.left = tempNode
+            Node.right = tempNode
             
             if(tempNode != None):
-                tempNode.parent = None
+                tempNode.parent = Node
         
         
         elif(parent.right == Node):
@@ -240,17 +246,18 @@ class AVLTree:
 
             right_leftChild.right = rightChild
             rightChild.parent = right_leftChild
-            Node.right = None
 
-            tempNode = right_leftChild.left
+            tempNode = right_leftChild.right
+            rightChild.left = None
 
             right_leftChild.left = Node
             Node.parent = right_leftChild
 
-            Node.left = tempNode
+            Node.right = tempNode
             
             if(tempNode != None):
-                tempNode.parent = None
+                tempNode.parent = Node
+
 
         else:
             raise RuntimeError("could not perform RL rotation, parent child dispute found")
@@ -300,6 +307,10 @@ class AVLTree:
             else:
                 prevNode.right = newNode
 
+            toDoCheck = False
+            while(toDoCheck == False):
+                toDoCheck = self.checkBalanceFactor(newNode)
+
             return True
 
 
@@ -316,11 +327,13 @@ class AVLTree:
             # we need to print in this way
             """left , root , right"""
             if(currentNode != None):
+
                 traverse(currentNode.left)
-                
+
                 result.append(currentNode)
 
                 traverse(currentNode.right)
+
 
         traverse(currentRoot)
 
@@ -503,7 +516,7 @@ class AVLTree:
 
             parent = toDelete.parent
 
-            # set the parent left or rigth to None according to were toDelete is
+            # set the parent left or right to None according to were toDelete is
             if(parent.left == toDelete):
                 parent.left = None
             else:
@@ -642,23 +655,29 @@ if __name__ == "__main__":
 
     obj = AVLTree()
 
-    obj.insertIntoTree(11)
-    obj.insertIntoTree(6)
-    obj.insertIntoTree(4)
-    obj.insertIntoTree(5)
-    obj.insertIntoTree(9)
-    obj.insertIntoTree(10)
-    obj.insertIntoTree(20)
+    obj.insertIntoTree(14)
     obj.insertIntoTree(17)
-    obj.insertIntoTree(42)
-    obj.insertIntoTree(30)
-    obj.insertIntoTree(50)
+    obj.insertIntoTree(11)
+    obj.insertIntoTree(7)
+    obj.insertIntoTree(53)
+    obj.insertIntoTree(4)
+    obj.insertIntoTree(13)
+    obj.insertIntoTree(12)
+    obj.insertIntoTree(4)
+    obj.insertIntoTree(8)
+    obj.insertIntoTree(13)
+    obj.insertIntoTree(60)
+    obj.insertIntoTree(19)
+    obj.insertIntoTree(16)
+    obj.insertIntoTree(20)
 
 
 
+    for i in obj.inOrderTraversal():
+        try:
+            print( i.data , i.parent.data)
+        except AttributeError:
+            print(i.data , None)
 
-
-
-
-    obj.correctNode(obj.returnNode(20) , obj.returnNode(30))
+    print(obj.returnNode(16))
 
