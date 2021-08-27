@@ -138,10 +138,17 @@ class AVLTree:
     def llRotation(self , Node):
 
         parent = Node.parent
-
         leftChild = Node.left
 
-        if(parent.left == Node):
+        if(parent == None):
+            leftChild.right = Node
+            Node.parent = leftChild
+
+            Node.left = None
+            return
+
+
+        if((parent.left == Node)):
             parent.left = leftChild
             leftChild.parent = parent
 
@@ -170,8 +177,15 @@ class AVLTree:
         parent = Node.parent
         rightChild = Node.right
 
+        if(parent == None):
+            rightChild.left = Node
+            Node.parent = rightChild
 
-        if(parent.right == Node):
+            Node.right = None
+            return
+
+
+        if((parent.right == Node)):
             parent.right = rightChild
             rightChild.parent = parent
 
@@ -180,7 +194,7 @@ class AVLTree:
 
             Node.right = None
 
-        elif(parent.left == Node):
+        elif((parent.left == Node)):
             parent.left = rightChild
             rightChild.parent = parent
 
@@ -194,11 +208,29 @@ class AVLTree:
 
 
     def lrRotation(self , Node):
+
         parent = Node.parent
         leftChild = Node.left
         left_rightChild = Node.left.right
 
-        if(parent.left == Node):
+        if(parent == None):
+            tempNode = left_rightChild.right
+
+            left_rightChild.left = leftChild
+            leftChild.parent = left_rightChild
+
+            leftChild.right = None
+
+            left_rightChild.right = Node
+            Node.parent = left_rightChild
+
+            Node.left = tempNode
+            
+            if(tempNode != None):
+                tempNode.parent = Node
+            return
+
+        if((parent.left == Node)):
             tempNode = left_rightChild.right
 
             parent.left = left_rightChild
@@ -246,7 +278,25 @@ class AVLTree:
         rightChild = Node.right
         right_leftChild = Node.right.left
 
-        if(parent.left == Node):
+        if(parent == None):
+            tempNode = right_leftChild.right
+
+            right_leftChild.right = rightChild
+            rightChild.parent = right_leftChild
+
+            rightChild.left = None
+
+            right_leftChild.left = Node
+            Node.parent = right_leftChild
+
+            Node.right = tempNode
+
+            if(tempNode != None):
+                tempNode.parent = Node
+            return
+
+
+        if((parent.left == Node)):
             tempNode = right_leftChild.right
 
             parent.left = right_leftChild
@@ -297,6 +347,7 @@ class AVLTree:
         # if the tree is empty init root
         if(self.root == None):
             self.root = Node(data)
+            return True
 
         else:
             currentNode = self.root
@@ -683,59 +734,117 @@ class AVLTree:
 # for testing purpose only
 if __name__ == "__main__":
 
-    obj = AVLTree()
+    # obj = AVLTree()
 
-    obj.insertIntoTree(14)
-    obj.insertIntoTree(17)
-    obj.insertIntoTree(11)
-    obj.insertIntoTree(7)
-    obj.insertIntoTree(53)
-    obj.insertIntoTree(4)
-    obj.insertIntoTree(13)
-    obj.insertIntoTree(12)
-    obj.insertIntoTree(4)
-    obj.insertIntoTree(8)
-    obj.insertIntoTree(13)
-    obj.insertIntoTree(60)
-    obj.insertIntoTree(19)
-    obj.insertIntoTree(16)
-    obj.insertIntoTree(20)
+    # for i in range(20):
 
-    print()
+    #     intInput = int(input("Enter number : "))
 
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    #     obj.insertIntoTree(intInput)
+    # obj.insertIntoTree(17)
+    # obj.insertIntoTree(11)
+    # obj.insertIntoTree(7)
+    # obj.insertIntoTree(53)
+    # obj.insertIntoTree(4)
+    # obj.insertIntoTree(13)
+    # obj.insertIntoTree(12)
+    # obj.insertIntoTree(4)
+    # obj.insertIntoTree(8)
+    # obj.insertIntoTree(13)
+    # obj.insertIntoTree(60)
+    # obj.insertIntoTree(19)
+    # obj.insertIntoTree(16)
+    # obj.insertIntoTree(20)
 
+    # print()
 
-    obj.deleteNode_data(8)
-
-    print()
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
 
 
-    obj.deleteNode_data(7)
+    # obj.deleteNode_data(8)
 
-    print()
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    # print()
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
 
 
-    obj.deleteNode_data(11)
-    print()
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    # obj.deleteNode_data(7)
+
+    # print()
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
+
+
+    # obj.deleteNode_data(11)
+    # print()
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    uperror = 0
+    delerror = 0
+    import random
+    for i in range(1000):
+
+        obj = AVLTree()
+
+        added = []
+
+        for j in range(100):
+            randomNo = random.randint(0,100)
+            print("\rj = {}".format(j) , end="")
+            obj.insertIntoTree(randomNo)
+            
+            if(randomNo not in added):
+                added.append(randomNo)
+
+            resultList = sorted(obj.inOrderTraversalData())
+            added = sorted(added)
+
+            if(resultList != added):
+                uperror = uperror + 1
+
+        for k in added:
+            delRes = obj.deleteNode_data(k)
+
+            resultList = sorted(obj.inOrderTraversalData())
+            added = sorted(added)
+
+            if((resultList != added) or (delRes != True)):
+                delerror = delerror + 1
+
+        print(i, uperror , delerror)
+
+
+
 
 

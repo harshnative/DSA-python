@@ -266,11 +266,16 @@ class BinaryTree:
 
             parent = toDelete.parent
 
-            # set the parent left or rigth to None according to were toDelete is
-            if(parent.left == toDelete):
-                parent.left = None
+            if(parent != None):
+
+                # set the parent left or rigth to None according to were toDelete is
+                if(parent.left == toDelete):
+                    parent.left = None
+                else:
+                    parent.right = None
+
             else:
-                parent.right = None
+                self.root = None
 
             # rm node from memory
             del toDelete
@@ -280,29 +285,39 @@ class BinaryTree:
             
             parent = toDelete.parent
 
-            # if the parent left is node to delete
-            if(parent.left == toDelete):
+            if(parent != None):
 
-                # then set the toDelete's child as parent left
-                if(toDelete.left != None):
-                    parent.left = toDelete.left
-                    toDelete.left.parent = parent
+                # if the parent left is node to delete
+                if(parent.left == toDelete):
+
+                    # then set the toDelete's child as parent left
+                    if(toDelete.left != None):
+                        parent.left = toDelete.left
+                        toDelete.left.parent = parent
+                    else:
+                        parent.left = toDelete.right
+                        toDelete.right.parent = parent
+
+
+
                 else:
-                    parent.left = toDelete.right
-                    toDelete.right.parent = parent
+                    # then set the toDelete's child as parent right
+                    if(toDelete.left != None):
+                        parent.right = toDelete.left
+                        toDelete.left.parent = parent
 
-
+                    else:
+                        parent.right = toDelete.right
+                        toDelete.right.parent = parent
 
             else:
-                # then set the toDelete's child as parent right
+                # then set the toDelete's child as parent left
                 if(toDelete.left != None):
-                    parent.right = toDelete.left
-                    toDelete.left.parent = parent
-
+                    self.root = toDelete.left
+                    self.root.parent = None
                 else:
-                    parent.right = toDelete.right
-                    toDelete.right.parent = parent
-
+                    self.root = toDelete.right
+                    self.root.parent = None
 
             del toDelete
 
@@ -403,59 +418,105 @@ class BinaryTree:
 # for testing purpose only
 if __name__ == "__main__":
 
-    obj = BinaryTree()
+    # obj = BinaryTree()
 
-    obj.insertIntoTree(11)
-    obj.insertIntoTree(6)
-    obj.insertIntoTree(4)
-    obj.insertIntoTree(5)
-    obj.insertIntoTree(9)
-    obj.insertIntoTree(10)
-    obj.insertIntoTree(20)
-    obj.insertIntoTree(17)
-    obj.insertIntoTree(42)
-    obj.insertIntoTree(30)
-    obj.insertIntoTree(50)
-
-
+    # obj.insertIntoTree(11)
+    # obj.insertIntoTree(6)
+    # obj.insertIntoTree(4)
+    # obj.insertIntoTree(5)
+    # obj.insertIntoTree(9)
+    # obj.insertIntoTree(10)
+    # obj.insertIntoTree(20)
+    # obj.insertIntoTree(17)
+    # obj.insertIntoTree(42)
+    # obj.insertIntoTree(30)
+    # obj.insertIntoTree(50)
 
 
 
 
 
-    print(obj.inOrderTraversalData())
-    print(obj.preOrderTraversalData())
-    print(obj.postOrderTraversalData())
 
-    print()
 
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    # print(obj.inOrderTraversalData())
+    # print(obj.preOrderTraversalData())
+    # print(obj.postOrderTraversalData())
 
-    print()
+    # print()
 
-    obj.deleteNode_data(11 , method="inorder_successor")
-    obj.deleteNode_data(9 , method="inorder_predecessor")
-    obj.deleteNode_data(42 , method="")
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
 
-    print()
+    # print()
 
-    print(obj.inOrderTraversalData())
-    print(obj.preOrderTraversalData())
-    print(obj.postOrderTraversalData())
+    # obj.deleteNode_data(11 , method="inorder_successor")
+    # obj.deleteNode_data(9 , method="inorder_predecessor")
+    # obj.deleteNode_data(42 , method="")
 
-    print()
+    # print()
 
-    for i in obj.inOrderTraversal():
-        try:
-            print( i.data , i.parent.data)
-        except AttributeError:
-            print(i.data , None)
+    # print(obj.inOrderTraversalData())
+    # print(obj.preOrderTraversalData())
+    # print(obj.postOrderTraversalData())
 
-    print()
+    # print()
 
-    print(obj.returnNode(5).parent.data)
+    # for i in obj.inOrderTraversal():
+    #     try:
+    #         print( i.data , i.parent.data)
+    #     except AttributeError:
+    #         print(i.data , None)
+
+    # print()
+
+    # print(obj.returnNode(5).parent.data)
+
+
+
+
+
+
+    uperror = 0
+    delerror = 0
+    import random
+    import copy
+
+    for i in range(1000):
+
+        obj = BinaryTree()
+
+        added = []
+
+        for j in range(100):
+            randomNo = random.randint(0,100)
+            print("\rj = {}".format(j) , end="")
+            obj.insertIntoTree(randomNo)
+            
+            if(randomNo not in added):
+                added.append(randomNo)
+
+            resultList = sorted(obj.inOrderTraversalData())
+            added = sorted(added)
+
+            if(resultList != added):
+                uperror = uperror + 1
+
+        
+        for k in list(range(len(added))):
+            delRes = obj.deleteNode_data(added[k])
+
+            resultList = sorted(obj.inOrderTraversalData())
+            delAdded = sorted(added[k+1:])
+
+            # print()
+            if((resultList != delAdded) or (delRes != True)):
+                delerror = delerror + 1
+
+        print("\n")
+        print(i, uperror , delerror)
+
+
 
