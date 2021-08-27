@@ -95,8 +95,17 @@ class AVLTree:
 
         firstTwo = pathList[:2]
 
-        if((firstTwo[0] == "left") and (firstTwo[0] == "left")):
-            pass
+        if((firstTwo[0] == "left") and (firstTwo[1] == "left")):
+            self.llRotation(Node)
+        elif((firstTwo[0] == "right") and (firstTwo[1] == "right")):
+            self.rrRotation(Node)
+        elif((firstTwo[0] == "left") and (firstTwo[1] == "right")):
+            self.lrRotation(Node)
+        elif((firstTwo[0] == "right") and (firstTwo[1] == "left")):
+            self.rlRotation(Node)
+        else:
+            raise RuntimeError("could not correct node with path = {}".format(pathList))
+            
 
 
     
@@ -155,6 +164,96 @@ class AVLTree:
             raise RuntimeError("could not perform RR rotation, parent child dispute found")
 
 
+    def lrRotation(self , Node):
+        parent = Node.parent
+        leftChild = Node.left
+        left_rightChild = Node.left.right
+
+        if(parent.left == Node):
+            parent.left = left_rightChild
+            left_rightChild.parent = parent
+
+            left_rightChild.left = leftChild
+            leftChild.parent = left_rightChild
+            Node.left = None
+
+            tempNode = left_rightChild.right
+
+            left_rightChild.right = Node
+            Node.parent = left_rightChild
+
+            Node.right = tempNode
+            
+            if(tempNode != None):
+                tempNode.parent = None
+        
+        
+        elif(parent.right == Node):
+            parent.right = left_rightChild
+            left_rightChild.parent = parent
+
+            left_rightChild.left = leftChild
+            leftChild.parent = left_rightChild
+            Node.left = None
+
+            tempNode = left_rightChild.right
+
+            left_rightChild.right = Node
+            Node.parent = left_rightChild
+
+            Node.right = tempNode
+            
+            if(tempNode != None):
+                tempNode.parent = None
+
+        else:
+            raise RuntimeError("could not perform LR rotation, parent child dispute found")
+
+
+    def rlRotation(self , Node):
+        parent = Node.parent
+        rightChild = Node.left
+        right_leftChild = Node.left.right
+
+        if(parent.left == Node):
+            parent.left = right_leftChild
+            right_leftChild.parent = parent
+
+            right_leftChild.right = rightChild
+            rightChild.parent = right_leftChild
+            Node.right = None
+
+            tempNode = right_leftChild.left
+
+            right_leftChild.left = Node
+            Node.parent = right_leftChild
+
+            Node.left = tempNode
+            
+            if(tempNode != None):
+                tempNode.parent = None
+        
+        
+        elif(parent.right == Node):
+            parent.right = right_leftChild
+            right_leftChild.parent = parent
+
+            right_leftChild.right = rightChild
+            rightChild.parent = right_leftChild
+            Node.right = None
+
+            tempNode = right_leftChild.left
+
+            right_leftChild.left = Node
+            Node.parent = right_leftChild
+
+            Node.left = tempNode
+            
+            if(tempNode != None):
+                tempNode.parent = None
+
+        else:
+            raise RuntimeError("could not perform RL rotation, parent child dispute found")
 
 
 
