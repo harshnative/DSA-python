@@ -1,7 +1,11 @@
 import numpy
 import copy
 from math import pow
+
+
 class MatOperations:
+
+    cacheDeterminantMEM = []
 
     # function to determine is the matrix is square that is n * n dimenional type
     @classmethod
@@ -25,7 +29,7 @@ class MatOperations:
     # function to find the determinant of a matrix
     # accepts a list or a numpy array
     @classmethod
-    def determinant(cls , matrix):
+    def determinant(cls , matrix , cache = True):
 
         isNumpyArray = type(matrix) == numpy.ndarray
 
@@ -46,6 +50,12 @@ class MatOperations:
         if(n == 2):
             determinant2by2 = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])
             return determinant2by2
+
+        # if the result is in cache return it
+        if(cache):
+            for i in cls.cacheDeterminantMEM:
+                if(i[0] == matrix):
+                    return i[1]
 
         finalDeterminant = 0
 
@@ -77,6 +87,8 @@ class MatOperations:
             
             finalDeterminant = finalDeterminant + ((matrix[0][i] * cls.determinant(newMatrix)) * int(pow(-1 , i)))
 
+        if(cache):
+            cls.cacheDeterminantMEM.append([matrix , finalDeterminant])
 
         return finalDeterminant
 
@@ -89,3 +101,6 @@ if __name__ == "__main__":
     array = numpy.array(matrix2)
 
     print(MatOperations.determinant(matrix1))
+    print(MatOperations.determinant(matrix2))
+    print(MatOperations.determinant(matrix1))
+    print(MatOperations.cacheDeterminantMEM)
