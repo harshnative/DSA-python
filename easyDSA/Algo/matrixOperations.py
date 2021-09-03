@@ -194,6 +194,39 @@ class MatOperations:
         cofactorMatrix_transpose = cls.transpose(cofactorMatrix)
 
         return cofactorMatrix_transpose
+
+    
+    # function to find the inverse of a matrix
+    @classmethod
+    def inverseMatrix(cls , matrix , cache = True):
+
+
+        # confirm it is a square matrix
+        result = cls.isSquareMatrix(matrix)
+
+        if(result == False):
+            raise ValueError("{} is not a square matrix".format(matrix))
+
+
+        # find the adjoint matrix
+        adjointMatrix = cls.adjointMatrix(matrix , cache)
+
+        n = len(adjointMatrix)
+
+        # find determinant , should not be 0
+        determinant = cls.determinant(matrix , cache)
+
+        if(determinant == 0):
+            raise ValueError("{} , determinant of this matrix is zero".format(matrix))
+
+        # divide the determinant from each value in matrix
+        for i in range(n):
+            for j in range(len(matrix[i])):
+                adjointMatrix[i][j] = adjointMatrix[i][j] / determinant
+
+        return adjointMatrix
+        
+
         
                 
 
@@ -204,24 +237,28 @@ if __name__ == "__main__":
     matrix2 = [[1,2,3] , [4,7,8] , [145,14,5]]
     matrix3 = [[1,-1,2] , [4,0,6] , [0,1,-1]]
     matrix4 = [[1,-1] , [4,0] , [0,1]]
+    matrix5 = [[3,0,2] , [2,0,-2] , [0,1,1]]
 
     array2 = numpy.array(matrix2)
     array3 = numpy.array(matrix3)
     array4 = numpy.array(matrix4)
+    array5 = numpy.array(matrix5)
 
     # print(MatOperations.determinant(matrix1))
     # print(MatOperations.determinant(matrix2))
     # print(MatOperations.determinant(matrix1))
     # print(MatOperations.cacheDeterminantMEM)
 
-    print(MatOperations.cofactorMatrix_adjoint(array3))
+    # print(MatOperations.cofactorMatrix_adjoint(array3))
 
     # print(MatOperations.transpose(matrix3))
     # print(MatOperations.transpose(array3))
     # print(MatOperations.transpose(matrix4))
     # print(MatOperations.transpose(array4))
 
-    print(MatOperations.adjointMatrix(array3))
+    # print(MatOperations.adjointMatrix(array3))
+
+    print(MatOperations.inverseMatrix(matrix5))
 
 
 
