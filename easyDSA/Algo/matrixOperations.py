@@ -140,6 +140,10 @@ class MatOperations:
             
             result.append(tempList)
 
+        # if the numpy array is passed then the result will also be returned in the form of numpy array
+        if(isNumpyArray):
+            result = numpy.array(result)
+
         return result
 
 
@@ -187,6 +191,9 @@ class MatOperations:
 
         cofactorMatrix = cls.cofactorMatrix_adjoint(matrix , cache)
 
+        cofactorMatrix_transpose = cls.transpose(cofactorMatrix)
+
+        return cofactorMatrix_transpose
         
                 
 
@@ -207,11 +214,14 @@ if __name__ == "__main__":
     # print(MatOperations.determinant(matrix1))
     # print(MatOperations.cacheDeterminantMEM)
 
-    # print(MatOperations.cofactorMatrix_adjoint(matrix3))
+    print(MatOperations.cofactorMatrix_adjoint(array3))
 
-    print(MatOperations.transpose(matrix3))
-    print(MatOperations.transpose(array3))
-    print(MatOperations.transpose(matrix4))
-    print(MatOperations.transpose(array4))
+    # print(MatOperations.transpose(matrix3))
+    # print(MatOperations.transpose(array3))
+    # print(MatOperations.transpose(matrix4))
+    # print(MatOperations.transpose(array4))
+
+    print(MatOperations.adjointMatrix(array3))
+
 
 
