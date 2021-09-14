@@ -225,6 +225,57 @@ class MatOperations:
                 adjointMatrix[i][j] = adjointMatrix[i][j] / determinant
 
         return adjointMatrix
+
+
+
+    @classmethod
+    def meanOfMatrix(cls , matrix):
+
+        # if the matrix is of numpy array type
+        isNumpyArray = type(matrix) == numpy.ndarray
+
+        if(isNumpyArray):
+            return matrix.mean()
+        
+        submission = 0
+        count = 0
+
+        for i in range(len(matrix)):
+            for j in range(len(i)):
+                submission = submission + matrix[i][j]
+                count = count + 1
+            
+        mean = submission / count
+
+        return mean
+
+        
+
+
+    @classmethod
+    def covariance(cls , x , y):
+        submission = 0
+
+        lenX = len(x)
+
+        if(lenX != len(y)):
+            raise RuntimeError("x and y are not equal in length where x = {} , y = {}".format(x,y))
+
+        for i in range(lenX):
+            submission = submission + ((x))
+
+
+    
+    @classmethod
+    def covarianceMatrix(cls , x , y):
+
+        """
+        [[cov(X , X) , cov(X , Y)] , 
+         [cov(Y , X) , cov(Y , Y)] ]
+        """
+
+
+
         
 
         
