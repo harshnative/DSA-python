@@ -26,21 +26,44 @@ class MatOperations:
 
         return True
 
+
     # function to find the determinant of a matrix
     # accepts a list or a numpy array
     @classmethod
-    def determinant(cls , matrix , cache = True):
+    def determinant(cls , matrix , cache = True , numpyOnly = False , roundedTo = 0 , limit = 5):
+
+        def removeIandJinMat(matrix , i , j , numpyArray = False):
+
+            if(numpyArray):
+                matrix = numpy.delete(matrix, (i), axis=0)
+                matrix = numpy.delete(matrix, (j), axis=1)
+                return matrix
+
+            else:
+                # removing ith row and jth col
+                return [row[: j] + row[j+1:] for row in (matrix[: i] + matrix[i+1:])]
 
 
-        # if the result is in cache return it
-        if(cache):
-            for i in cls.cacheDeterminantMEM:
-                if(i[0] == matrix):
-                    return i[1]
-
-        isNumpyArray = type(matrix) == numpy.ndarray
 
         n = len(matrix)
+
+        if(n < 1):
+            raise ValueError("Empty matrix passed")
+
+        
+        # if the n is greator than 10 use the numpy determinant function
+        if((n > limit) or numpyOnly):
+            isNumpyArray = type(matrix) == numpy.ndarray
+
+            if(isNumpyArray):
+                return round(numpy.linalg.det(matrix) , roundedTo) 
+
+            else:
+                matrix = numpy.array(matrix)
+                return round(numpy.linalg.det(matrix) , roundedTo) 
+
+            
+
 
         # conforming if it is a square matrix
         result = cls.isSquareMatrix(matrix)
@@ -51,47 +74,47 @@ class MatOperations:
 
         # return just number if the matrix only has 1 element
         if(n == 1):
-            return matrix[0][0]
+            return round(matrix[0][0] , roundedTo)
 
         # return the determinant of 2 by 2 matrix
         if(n == 2):
             determinant2by2 = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])
-            return determinant2by2
+            return round(determinant2by2 , roundedTo) 
 
-        finalDeterminant = 0
 
-        # calculate the determinant
-        # determinant is submission of aij (-1^(j) * determinant of new matrix)
-        # here the new matrix is matrix excluding ith row , jth col 
-        for i in range(n):
-            
-            # if the array is numpy type
-            if(isNumpyArray):
-                newMatrix = matrix
+        isNumpyArray = type(matrix) == numpy.ndarray
 
-                # excluding the row
-                newMatrix = numpy.delete(newMatrix, (0), axis=0)
-
-                # excluding the col
-                newMatrix = numpy.delete(newMatrix, (i), axis=1)
-            
-            # if the array is list type
-            else:
-                newMatrix = copy.deepcopy(matrix)
-
-                # excluding the row
-                newMatrix.pop(0)
-
-                # excluding the col
-                [j.pop(i) for j in newMatrix]
-
-            
-            finalDeterminant = finalDeterminant + ((matrix[0][i] * cls.determinant(newMatrix)) * int(pow(-1 , i)))
-
+        # if the result is in cache return it
         if(cache):
-            cls.cacheDeterminantMEM.append([matrix , finalDeterminant])
+            for i in cls.cacheDeterminantMEM:
 
-        return finalDeterminant
+                if(type(i[0]) == numpy.ndarray or isNumpyArray):
+                    if(numpy.array_equal(i[0] , matrix)):
+                        return i[1]
+
+                elif(i[0] == matrix):
+                    return i[1]
+
+
+        if(n > 2):
+
+            finalDeterminant = 0
+
+            # calculate the determinant
+            # determinant is submission of aij (-1^(j) * determinant of new matrix)
+            # here the new matrix is matrix excluding ith row , jth col 
+
+
+            for i in range(n):
+
+                subMat = removeIandJinMat(matrix , 0 , i , isNumpyArray)
+    
+                finalDeterminant = finalDeterminant + ((matrix[0][i] * cls.determinant(subMat)) * int(pow(-1 , i)))
+
+            if(cache):
+                cls.cacheDeterminantMEM.append([matrix , finalDeterminant])
+
+            return round(finalDeterminant , roundedTo) 
 
 
 
@@ -279,23 +302,34 @@ class MatOperations:
         
 
         
-                
+def numpyDeterminant(matrix):
+    a = numpy.array(matrix) 
+    return numpy.linalg.det(a)
 
 
 if __name__ == "__main__":
 
     matrix1 = [[1,4,2,3] , [0,1,4,4] , [-1,0,1,0] , [2,0,4,1]]
+    matrix1 = [[39236, 66782, 62717, 67851], [94943, 60210, 33571, 64054], [54493, 90443, 16758, 30514], [75354, 37653, 45644, 94705]]
     matrix2 = [[1,2,3] , [4,7,8] , [145,14,5]]
     matrix3 = [[1,-1,2] , [4,0,6] , [0,1,-1]]
     matrix4 = [[1,-1] , [4,0] , [0,1]]
     matrix5 = [[3,0,2] , [2,0,-2] , [0,1,1]]
 
+    array1 = numpy.array([[85302., 48074., 69284., 89482., 49353.],
+       [31905., 32238., 36901., 98817., 94439.],
+       [66635., 25787., 70228., 46234., 60768.],
+       [42672., 74636., 16335., 49230., 42135.],
+       [19544., 90848., 82063., 31646., 93367.]])
     array2 = numpy.array(matrix2)
     array3 = numpy.array(matrix3)
     array4 = numpy.array(matrix4)
     array5 = numpy.array(matrix5)
 
-    # print(MatOperations.determinant(matrix1))
+
+    print(MatOperations.determinant(matrix1))
+    print('{0:.20f}'.format(MatOperations.determinant(array1)))
+    print(round(numpy.linalg.det(array1)))
     # print(MatOperations.determinant(matrix2))
     # print(MatOperations.determinant(matrix1))
     # print(MatOperations.cacheDeterminantMEM)
@@ -309,7 +343,7 @@ if __name__ == "__main__":
 
     # print(MatOperations.adjointMatrix(array3))
 
-    print(MatOperations.inverseMatrix(matrix5))
+    # print(MatOperations.inverseMatrix(matrix5))
 
 
 
