@@ -287,10 +287,24 @@ class MatOperations:
         lenX = len(x)
 
         if(lenX != len(y)):
-            raise RuntimeError("x and y are not equal in length where x = {} , y = {}".format(x,y))
+            raise ValueError("x and y are not equal in length where x = {} , y = {}".format(x,y))
 
         for i in range(lenX):
-            submission = submission + ((x))
+            if(len(x[i]) != len(y[i])):
+                raise ValueError("x and y are not equal in length where x = {} , y = {}".format(x,y))
+
+
+        xMean = cls.meanOfMatrix(x)
+        yMean = cls.meanOfMatrix(y)
+
+        elementCount = 0
+
+        for i in range(lenX):
+            for j in range(len(x[i])):
+                elementCount = elementCount + 1
+                submission = submission + ((x[i][j] - xMean) * (y[i][j] - yMean))
+
+        return submission / (elementCount - 1)
 
 
     
@@ -301,6 +315,16 @@ class MatOperations:
         [[cov(X , X) , cov(X , Y)] , 
          [cov(Y , X) , cov(Y , Y)] ]
         """
+
+        isNumpyArray = ((type(x) == numpy.ndarray) or (type(y) == numpy.ndarray))
+        
+
+        result = [[cls.covariance(x,x) , cls.covariance(x,y)] , [cls.covariance(y,x) , cls.covariance(y,y)]]
+
+        if(isNumpyArray):
+            return numpy.array(result)
+        else:
+            return result
 
 
 
@@ -345,6 +369,14 @@ if __name__ == "__main__":
     # print(MatOperations.adjointMatrix(array3))
 
     # print(MatOperations.inverseMatrix(matrix5))
+
+
+    matrixCov1 = [[4,8,13,7]]
+    matrixCov2 = [[11,4,5,14]]
+
+    print(MatOperations.covarianceMatrix(matrixCov1 , matrixCov2))
+
+    print(numpy.cov(matrixCov1, matrixCov2))
 
 
 
