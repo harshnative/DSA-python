@@ -2,6 +2,9 @@ import numpy
 import copy
 from math import pow
 
+from numpy.lib.function_base import place
+from numpy.linalg.linalg import _raise_linalgerror_eigenvalues_nonconvergence
+
 
 class MatOperations:
 
@@ -328,6 +331,74 @@ class MatOperations:
 
 
 
+    @classmethod
+    def reshapeMatrix(cls , matrix , m , n , placeholder = 0):
+
+        resultMat = []
+        lenMatrix = len(matrix)
+
+        for i in range(m):
+            tempList = []
+
+            if(i < lenMatrix):
+                lenI = len(matrix[i])
+
+                for j in range(n):
+                    
+                    if(j < lenI):
+                        tempList.append(matrix[i][j])
+                    else:
+                        tempList.append(placeholder)
+
+            else:
+                tempList = [placeholder for _ in range(n)]
+
+            resultMat.append(tempList)
+
+        return resultMat
+
+
+
+
+    @classmethod
+    def addTwoMatrix(cls , x , y):
+
+        resultMat = []
+
+        lenX = len(x)
+        lenY = len(y)
+        
+        m = max(lenX , lenY)
+
+        n = 0
+
+        for i in x:
+            lenI = len(i)
+            if(lenI > n):
+                n = lenI
+
+        for i in y:
+            lenI = len(i)
+            if(lenI > n):
+                n = lenI
+
+        x = cls.reshapeMatrix(x , m , n)
+        y = cls.reshapeMatrix(y , m , n)
+
+        resultMat = []
+
+        for i,j in zip(x,y):
+            tempList = []
+            for k,l in zip(i,j):
+                tempList.append(k + l)
+            resultMat.append(tempList)
+
+        return resultMat
+
+        
+
+
+
         
 
 
@@ -371,13 +442,21 @@ if __name__ == "__main__":
     # print(MatOperations.inverseMatrix(matrix5))
 
 
-    matrixCov1 = [[4,8,13,7]]
-    matrixCov2 = [[11,4,5,14]]
+    # matrixCov1 = [[4,8,13,7]]
+    # matrixCov2 = [[11,4,5,14]]
 
-    print(MatOperations.covarianceMatrix(matrixCov1 , matrixCov2))
+    # print(MatOperations.covarianceMatrix(matrixCov1 , matrixCov2))
 
-    print(numpy.cov(matrixCov1, matrixCov2))
+    # print(numpy.cov(matrixCov1, matrixCov2))
 
 
 
+
+
+
+
+    matrix1 = [[1,4,2,3] , [0,1,4,4] , [-1,0,1,0] , [2,0,4,1]]
+    matrix2 = [[1,4,2,3] , [0,1,4,4] , [-1,0,1,0,4]]
+    # print(MatOperations.reshapeMatrix(matrix1 , 10 , 10))
+    print(MatOperations.addTwoMatrix(matrix1  , matrix2))
 
