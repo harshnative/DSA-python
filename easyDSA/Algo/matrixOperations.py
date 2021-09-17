@@ -269,7 +269,7 @@ class MatOperations:
         count = 0
 
         for i in range(len(matrix)):
-            for j in range(len(i)):
+            for j in range(len(matrix[i])):
                 submission = submission + matrix[i][j]
                 count = count + 1
             
@@ -306,10 +306,6 @@ class MatOperations:
 
         
 
-        
-def numpyDeterminant(matrix):
-    a = numpy.array(matrix) 
-    return numpy.linalg.det(a)
 
 
 if __name__ == "__main__":

@@ -8,6 +8,8 @@ import numpy
 
 import sys
 import os
+
+from numpy.core.fromnumeric import transpose
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import matrixOperations as MO
@@ -29,12 +31,11 @@ whiteColor = fg('white')
 # def isSquareMatrixTest(howMany):
 
 #     avgTime = 0
+#     error = 0
+#     errorList = []
+
 
 #     for i in range(howMany):
-
-#         error = 0
-#         errorList = []
-
 #         n = random.randint(1 , 100)
 
 #         myList = []
@@ -111,12 +112,12 @@ whiteColor = fg('white')
 #         return Sum
 
 #     avgTime = 0
+#     error = 0
+#     errorList = []
+
 
 
 #     for k in range(howMany):
-
-#         error = 0
-#         errorList = []
 
 #         n = random.randint(2 , 5)
 
@@ -206,12 +207,12 @@ whiteColor = fg('white')
 #         return mat.transpose()
 
 #     avgTime = 0
+#     error = 0
+#     errorList = []
 
 
 #     for k in range(howMany):
 
-#         error = 0
-#         errorList = []
 
 #         n = random.randint(1 , 100)
 
@@ -268,4 +269,106 @@ whiteColor = fg('white')
 #     print(redColor + "transpose function test failed")
 #     print(redColor + "error = {} / {}".format(error , 1000))
 #     print(redColor + "error list = {}".format(errorList))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+print("\n\n")
+
+# testing determinant function 
+print(whiteColor + "Testing mean of matrix function")
+
+
+
+def meanTest(howMany):
+
+    
+    # transpose using numpy
+    def numpyMean(mat):
+        return mat.mean()
+
+    avgTime = 0
+    error = 0
+    errorList = []
+
+
+    for k in range(howMany):
+
+        n = random.randint(1 , 100)
+
+        myList = []
+
+        for i in range(n):
+            tempList = []
+            for j in range(n):
+                tempList.append(random.randint(0 , 100000))
+
+            myList.append(tempList)
+
+        result2 = numpyMean(numpy.array(myList))
+
+        print(f"\ron {k} / {howMany} , test size = {n}" , end = "")
+
+        isNumpyArray = bool(random.randint(0,1))
+
+        if(isNumpyArray):
+            temp = numpy.array(myList)
+            start = time.time()
+            result1 = MO.MatOperations.meanOfMatrix(temp)
+            end = time.time()
+        else:
+            start = time.time()
+            result1 = MO.MatOperations.meanOfMatrix(myList)
+            end = time.time()
+
+
+        avgTime = avgTime + (end - start)
+
+
+        if(result1 != result2):
+            error = error + 1
+
+            errorList.append([myList , result1 , result2])
+
+    avgTime = avgTime / howMany
+
+    print()
+
+    return error , errorList , avgTime
+
+
+
+
+
+error , errorList , avgTime = meanTest(1000)
+
+if(error == 0):
+    print(blueColor + "avg time taken by meanOfMatrix function per matrix = {}".format(avgTime))
+    print(greenColor + "meanOfMatrix function test passed")
+else:
+    print(redColor + "meanOfMatrix function test failed")
+    print(redColor + "error = {} / {}".format(error , 1000))
+    print(redColor + "error list = {}".format(errorList))
     
