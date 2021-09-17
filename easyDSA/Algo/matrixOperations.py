@@ -123,6 +123,18 @@ class MatOperations:
     @classmethod
     def cofactorMatrix_adjoint(cls , matrix , cache = True):
 
+        def removeIandJinMat(matrix , i , j , numpyArray = False):
+
+            if(numpyArray):
+                matrix = numpy.delete(matrix, (i), axis=0)
+                matrix = numpy.delete(matrix, (j), axis=1)
+                return matrix
+
+            else:
+                # removing ith row and jth col
+                return [row[: j] + row[j+1:] for row in (matrix[: i] + matrix[i+1:])]
+
+
         # if the matrix is of numpy array type
         isNumpyArray = type(matrix) == numpy.ndarray
 
@@ -135,28 +147,11 @@ class MatOperations:
 
             for j in range(len(matrix[i])):
 
-                # if the array is numpy type
-                if(isNumpyArray):
-                    newMatrix = matrix
-
-                    # excluding the row
-                    newMatrix = numpy.delete(newMatrix, (i), axis=0)
-
-                    # excluding the col
-                    newMatrix = numpy.delete(newMatrix, (j), axis=1)
+                subMat = removeIandJinMat(matrix , i , j , isNumpyArray)
                 
-                # if the array is list type
-                else:
-                    newMatrix = copy.deepcopy(matrix)
-
-                    # excluding the row
-                    newMatrix.pop(i)
-
-                    # excluding the col
-                    [k.pop(j) for k in newMatrix]
 
                 # calculating Aij
-                Aij = int(pow(-1 , i+j)) * cls.determinant(newMatrix , cache)
+                Aij = int(pow(-1 , i+j)) * cls.determinant(subMat , cache)
 
                 # adding to list
                 tempList.append(Aij)
@@ -327,9 +322,9 @@ if __name__ == "__main__":
     array5 = numpy.array(matrix5)
 
 
-    print(MatOperations.determinant(matrix1))
-    print('{0:.20f}'.format(MatOperations.determinant(array1)))
-    print(round(numpy.linalg.det(array1)))
+    # print(MatOperations.determinant(matrix1))
+    # print('{0:.20f}'.format(MatOperations.determinant(array1)))
+    # print(round(numpy.linalg.det(array1)))
     # print(MatOperations.determinant(matrix2))
     # print(MatOperations.determinant(matrix1))
     # print(MatOperations.cacheDeterminantMEM)
@@ -344,6 +339,63 @@ if __name__ == "__main__":
     # print(MatOperations.adjointMatrix(array3))
 
     # print(MatOperations.inverseMatrix(matrix5))
+
+
+    test1 = [[61769,  6185,  1342, 28727, 30681, 34214, 70955, 65399, 11194,
+        26056],
+       [94579, 70669, 87344, 84704, 83691, 49801, 78211, 93170, 56273,
+        98898],
+       [89458, 10018, 94979, 67720, 53967, 34888, 27666, 81891, 95268,
+        54166],
+       [62648, 13108, 41356, 53519, 86872, 26844, 74008, 48080, 12266,
+        60403],
+       [45157, 76461, 81624, 46938, 98143, 21940, 38107, 93206, 30118,
+        96700],
+       [67026, 18708, 87773, 39546,   762,  8409, 29487, 30324, 13115,
+        56866],
+       [43800, 98147, 19527, 48317, 66606, 38277, 45147,  9120, 43529,
+        97776],
+       [23050,  4600, 96321, 96571,  6038, 12757,  7010, 32426, 99869,
+        71490],
+       [30314, 43404, 89541, 32762, 14295, 38871, 90945, 84489, 96478,
+        99571],
+       [81923, 63723, 10834, 24925, 72670, 18442, 87553,  5670, 37016,
+        35074]] 
+        
+    test2 = [[61769,  6185,  1342, 28727, 30681, 34214, 70955, 65399, 11194,
+        26056],
+       [94579, 70669, 87344, 84704, 83691, 49801, 78211, 93170, 56273,
+        98898],
+       [89458, 10018, 94979, 67720, 53967, 34888, 27666, 81891, 95268,
+        54166],
+       [62648, 13108, 41356, 53519, 86872, 26844, 74008, 48080, 12266,
+        60403],
+       [45157, 76461, 81624, 46938, 98143, 21940, 38107, 93206, 30118,
+        96700],
+       [67026, 18708, 87773, 39546,   762,  8409, 29487, 30324, 13115,
+        56866],
+       [43800, 98147, 19527, 48317, 66606, 38277, 45147,  9120, 43529,
+        97776],
+       [23050,  4600, 96321, 96571,  6038, 12757,  7010, 32426, 99869,
+        71490],
+       [30314, 43404, 89541, 32762, 14295, 38871, 90945, 84489, 96478,
+        99571],
+       [81923, 63723, 10834, 24925, 72670, 18442, 87553,  5670, 37016,
+        35074]]
+
+    test1 = numpy.array(test1)
+    test2 = numpy.array(test2)
+
+    print(numpy.array_equal(test1 , test2))
+    count = 0
+
+    for i,j in zip(test1 , test2):
+        for k,l in zip(i,j):
+            if(k != l):
+                count = count + 1
+
+    print(count)
+
 
 
 

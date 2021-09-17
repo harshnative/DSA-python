@@ -162,9 +162,110 @@ error , errorList , avgTime = determinantTest(1000)
 
 if(error == 0):
     print(blueColor + "avg time taken by isSquareMatrixTest function per matrix = {}".format(avgTime))
-    print(greenColor + "square matrix test passed")
+    print(greenColor + "determinant function test passed")
 else:
-    print(redColor + "square matrix test failed")
+    print(redColor + "determinant function test failed")
     print(redColor + "error = {} / {}".format(error , 1000))
     print(redColor + "error list = {}".format(errorList))
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+print("\n\n")
+
+# testing determinant function 
+print(whiteColor + "Testing transpose function")
+
+
+
+def transposeTest(howMany):
+
+    
+    # transpose using numpy
+    def numpyTranspose(mat):
+        return mat.transpose()
+
+    avgTime = 0
+
+
+    for k in range(howMany):
+
+        error = 0
+        errorList = []
+
+        n = random.randint(1 , 100)
+
+        myList = []
+
+        for i in range(n):
+            tempList = []
+            for j in range(n):
+                tempList.append(random.randint(0 , 100000))
+
+            myList.append(tempList)
+
+        result2 = numpyTranspose(numpy.array(myList))
+
+        print(f"\ron {k} / {howMany} , test size = {n}" , end = "")
+
+        isNumpyArray = bool(random.randint(0,1))
+
+        if(isNumpyArray):
+            temp = numpy.array(myList)
+            start = time.time()
+            result1 = MO.MatOperations.transpose(temp)
+            end = time.time()
+        else:
+            start = time.time()
+            result1 = MO.MatOperations.transpose(myList)
+            end = time.time()
+
+
+        avgTime = avgTime + (end - start)
+
+
+        if(not(numpy.array_equal(result1 , result2))):
+            error = error + 1
+
+            errorList.append([myList , result1 , result2])
+
+    avgTime = avgTime / howMany
+
+    print()
+
+    return error , errorList , avgTime
+
+
+
+
+
+error , errorList , avgTime = transposeTest(1000)
+
+if(error == 0):
+    print(blueColor + "avg time taken by transpose function per matrix = {}".format(avgTime))
+    print(greenColor + "transpose function test passed")
+else:
+    print(redColor + "transpose function test failed")
+    print(redColor + "error = {} / {}".format(error , 1000))
+    print(redColor + "error list = {}".format(errorList))
+        
