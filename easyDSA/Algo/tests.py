@@ -10,6 +10,7 @@ import sys
 import os
 
 from numpy.core.fromnumeric import transpose
+from numpy.core.numeric import array_equal
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import matrixOperations as MO
@@ -295,19 +296,127 @@ whiteColor = fg('white')
 
 
 
+# print("\n\n")
+
+# # testing mean of matrix function 
+# print(whiteColor + "Testing mean of matrix function")
+
+
+
+# def meanTest(howMany):
+
+    
+#     # transpose using numpy
+#     def numpyMean(mat):
+#         return mat.mean()
+
+#     avgTime = 0
+#     error = 0
+#     errorList = []
+
+
+#     for k in range(howMany):
+
+#         n = random.randint(1 , 100)
+
+#         myList = []
+
+#         for i in range(n):
+#             tempList = []
+#             for j in range(n):
+#                 tempList.append(random.randint(0 , 100000))
+
+#             myList.append(tempList)
+
+#         result2 = numpyMean(numpy.array(myList))
+
+#         print(f"\ron {k} / {howMany} , test size = {n}" , end = "")
+
+#         isNumpyArray = bool(random.randint(0,1))
+
+#         if(isNumpyArray):
+#             temp = numpy.array(myList)
+#             start = time.time()
+#             result1 = MO.MatOperations.meanOfMatrix(temp)
+#             end = time.time()
+#         else:
+#             start = time.time()
+#             result1 = MO.MatOperations.meanOfMatrix(myList)
+#             end = time.time()
+
+
+#         avgTime = avgTime + (end - start)
+
+
+#         if(result1 != result2):
+#             error = error + 1
+
+#             errorList.append([myList , result1 , result2])
+
+#     avgTime = avgTime / howMany
+
+#     print()
+
+#     return error , errorList , avgTime
+
+
+
+
+
+# error , errorList , avgTime = meanTest(1000)
+
+# if(error == 0):
+#     print(blueColor + "avg time taken by meanOfMatrix function per matrix = {}".format(avgTime))
+#     print(greenColor + "meanOfMatrix function test passed")
+# else:
+#     print(redColor + "meanOfMatrix function test failed")
+#     print(redColor + "error = {} / {}".format(error , 1000))
+#     print(redColor + "error list = {}".format(errorList))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print("\n\n")
 
-# testing determinant function 
-print(whiteColor + "Testing mean of matrix function")
+# testing multiplyMatrix function 
+print(whiteColor + "Testing multiplyMatrix function")
 
 
 
-def meanTest(howMany):
+def multiplyTest(howMany):
 
     
     # transpose using numpy
-    def numpyMean(mat):
-        return mat.mean()
+    def numpymul(mat1 , mat2):
+        return numpy.dot(mat1,mat2)
 
     avgTime = 0
     error = 0
@@ -317,37 +426,39 @@ def meanTest(howMany):
     for k in range(howMany):
 
         n = random.randint(1 , 100)
+        m = random.randint(1 , 100)
 
         myList = []
 
-        for i in range(n):
+        for i in range(m):
             tempList = []
             for j in range(n):
-                tempList.append(random.randint(0 , 100000))
+                tempList.append(random.randint(0 , 1000))
 
             myList.append(tempList)
 
-        result2 = numpyMean(numpy.array(myList))
+        myList2 = []
 
-        print(f"\ron {k} / {howMany} , test size = {n}" , end = "")
+        for i in range(n):
+            tempList = []
+            for j in range(m):
+                tempList.append(random.randint(0 , 1000))
 
-        isNumpyArray = bool(random.randint(0,1))
+            myList2.append(tempList)
 
-        if(isNumpyArray):
-            temp = numpy.array(myList)
-            start = time.time()
-            result1 = MO.MatOperations.meanOfMatrix(temp)
-            end = time.time()
-        else:
-            start = time.time()
-            result1 = MO.MatOperations.meanOfMatrix(myList)
-            end = time.time()
+        result2 = numpymul(numpy.array(myList) , numpy.array(myList2))
+
+        print(f"\ron {k} / {howMany} , test size = {m} by {n}" , end = "")
+
+        start = time.time()
+        result1 = MO.MatOperations.multiplyTwoMatrix(myList , myList2)
+        end = time.time()
 
 
         avgTime = avgTime + (end - start)
 
 
-        if(result1 != result2):
+        if(not(numpy.array_equal(result1 , result2))):
             error = error + 1
 
             errorList.append([myList , result1 , result2])
@@ -362,13 +473,13 @@ def meanTest(howMany):
 
 
 
-error , errorList , avgTime = meanTest(1000)
+error , errorList , avgTime = multiplyTest(1000)
 
 if(error == 0):
-    print(blueColor + "avg time taken by meanOfMatrix function per matrix = {}".format(avgTime))
-    print(greenColor + "meanOfMatrix function test passed")
+    print(blueColor + "avg time taken by multiplyMatrix function per matrix = {}".format(avgTime))
+    print(greenColor + "multiplyMatrix function test passed")
 else:
-    print(redColor + "meanOfMatrix function test failed")
+    print(redColor + "multiplyMatrix function test failed")
     print(redColor + "error = {} / {}".format(error , 1000))
     print(redColor + "error list = {}".format(errorList))
     

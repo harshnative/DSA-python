@@ -258,21 +258,27 @@ class MatOperations:
         return adjointMatrix
 
 
-
+    # function to find the mean of the matrix
+    # mean = submission of all elements / total number of elements
     @classmethod
     def meanOfMatrix(cls , matrix):
 
         # if the matrix is of numpy array type
         isNumpyArray = type(matrix) == numpy.ndarray
 
+        # use numpy mean method to find the mean of a numpy array type matrix
         if(isNumpyArray):
             return matrix.mean()
         
         submission = 0
         count = 0
 
+        # iterate through rows
         for i in range(len(matrix)):
+
+            # iterate through cols
             for j in range(len(matrix[i])):
+
                 submission = submission + matrix[i][j]
                 count = count + 1
             
@@ -282,7 +288,7 @@ class MatOperations:
 
         
 
-
+    # function to find the covariance btw two matrixes
     @classmethod
     def covariance(cls , x , y):
         submission = 0
@@ -310,7 +316,7 @@ class MatOperations:
         return submission / (elementCount - 1)
 
 
-    
+    # function to make a covariance matrix
     @classmethod
     def covarianceMatrix(cls , x , y):
 
@@ -320,9 +326,10 @@ class MatOperations:
         """
 
         isNumpyArray = ((type(x) == numpy.ndarray) or (type(y) == numpy.ndarray))
-        
 
-        result = [[cls.covariance(x,x) , cls.covariance(x,y)] , [cls.covariance(y,x) , cls.covariance(y,y)]]
+        covarianceXY = cls.covariance(x,y)
+
+        result = [[cls.covariance(x,x) , covarianceXY] , [covarianceXY , cls.covariance(y,y)]]
 
         if(isNumpyArray):
             return numpy.array(result)
@@ -330,7 +337,7 @@ class MatOperations:
             return result
 
 
-
+    # function to reshape a matrix into m by n size with the extra spaces begin filled with the placeholder
     @classmethod
     def reshapeMatrix(cls , matrix , m , n , placeholder = 0):
 
@@ -355,11 +362,16 @@ class MatOperations:
 
             resultMat.append(tempList)
 
-        return resultMat
+        isNumpyArray = type(matrix) == numpy.ndarray
+
+        if(isNumpyArray):
+            return numpy.array(resultMat)
+        else:
+            return resultMat
 
 
 
-
+    # function to add two matrixes
     @classmethod
     def addTwoMatrix(cls , x , y):
 
@@ -393,7 +405,94 @@ class MatOperations:
                 tempList.append(k + l)
             resultMat.append(tempList)
 
-        return resultMat
+        isNumpyArray = ((type(x) == numpy.ndarray) or (type(y) == numpy.ndarray))
+
+        if(isNumpyArray):
+            return numpy.array(resultMat)
+        else:
+            return resultMat
+
+
+    # function to sub two matrixes
+    # x - y
+    @classmethod
+    def subtractTwoMatrix(cls , x , y):
+
+        resultMat = []
+
+        lenX = len(x)
+        lenY = len(y)
+        
+        m = max(lenX , lenY)
+
+        n = 0
+
+        for i in x:
+            lenI = len(i)
+            if(lenI > n):
+                n = lenI
+
+        for i in y:
+            lenI = len(i)
+            if(lenI > n):
+                n = lenI
+
+        x = cls.reshapeMatrix(x , m , n)
+        y = cls.reshapeMatrix(y , m , n)
+
+        resultMat = []
+
+        for i,j in zip(x,y):
+            tempList = []
+            for k,l in zip(i,j):
+                tempList.append(k - l)
+            resultMat.append(tempList)
+
+        isNumpyArray = ((type(x) == numpy.ndarray) or (type(y) == numpy.ndarray))
+
+        if(isNumpyArray):
+            return numpy.array(resultMat)
+        else:
+            return resultMat
+
+
+
+    # function to multiply two matrixes
+    @classmethod
+    def multiplyTwoMatrix(cls , x , y):
+
+        # if the matrix is of numpy array type
+        isNumpyArray = ((type(x) == numpy.ndarray) or (type(y) == numpy.ndarray))
+
+        # use numpy mean method to find the mean of a numpy array type matrix
+        if(isNumpyArray):
+            return numpy.dot(x,y)
+
+        y = cls.transpose(y)
+
+        m = len(x)
+        n = len(y)
+
+        result = []
+
+        for i in range(m):
+            tempList = []
+            for j in range(n):
+                submission = 0
+
+                for k,l in zip(x[i] , y[j]):
+                    submission = submission + (k*l)
+
+                tempList.append(submission)
+
+            result.append(tempList)
+
+        return result
+
+
+                
+
+
 
         
 
@@ -442,8 +541,8 @@ if __name__ == "__main__":
     # print(MatOperations.inverseMatrix(matrix5))
 
 
-    # matrixCov1 = [[4,8,13,7]]
-    # matrixCov2 = [[11,4,5,14]]
+    # matrixCov1 = [[4,8,13,7] , [4,8,13,7]]
+    # matrixCov2 = [[11,4,5,14] , [4,8,13,7]]
 
     # print(MatOperations.covarianceMatrix(matrixCov1 , matrixCov2))
 
@@ -458,5 +557,10 @@ if __name__ == "__main__":
     matrix1 = [[1,4,2,3] , [0,1,4,4] , [-1,0,1,0] , [2,0,4,1]]
     matrix2 = [[1,4,2,3] , [0,1,4,4] , [-1,0,1,0,4]]
     # print(MatOperations.reshapeMatrix(matrix1 , 10 , 10))
-    print(MatOperations.addTwoMatrix(matrix1  , matrix2))
+    print(MatOperations.addTwoMatrix(matrix1 , matrix2))
+
+
+    # matrix1 = [[1,2,3] , [4,5,6]]
+    # matrix2 = [[7,8] , [9,10] , [11,12]]
+    # print(MatOperations.multiplyTwoMatrix(matrix1  , matrix2))
 
