@@ -14,6 +14,9 @@ from numpy.core.numeric import array_equal
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import matrixOperations as MO
+import searchingAlgos as SEACA
+import sortingAlgos as SORTA
+
 
 
 from colored import fg
@@ -298,6 +301,17 @@ def transposeFuncTest():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 def meanFunctionTest():
     print("\n\n")
 
@@ -488,6 +502,360 @@ def multiplyFunctionTest():
         
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def sortingTester():
+
+
+    # function to test the sorting algo's
+    def testSorting(sortingAlgo , minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 1000 , onlyInt = True):
+
+        print("\n\n")
+        print(whiteColor + "Testing {} function".format(sortingAlgo.__name__))
+
+        failedNo = 0
+        avgTime = 0
+
+        for count in range(repeat):
+            failed = False
+
+            print(f"\ron {count} / {repeat}" , end = "")
+            
+            arr = []
+
+            # generating a array with random numbers of size arrSize
+            for _ in range(arrSize):
+                toAppend = 0
+                if(onlyInt):
+                    toAppend = random.randint(minElement , maxElement)
+                else:
+                    toAppend = random.uniform(float(minElement) , float(maxElement))
+
+                arr.append(toAppend)
+            
+
+            
+            # sorting the array using algo 
+            begin = time.time() 
+
+            if(SORTA.SortingAlgo.quickSort == sortingAlgo):
+                pivot = random.randint(0 , len(arr) - 1)
+                sortedArr = sortingAlgo(arr , pivotElement = pivot)
+            else:
+                sortedArr = sortingAlgo(arr)
+
+            end = time.time() 
+
+            avgTime = avgTime + (end - begin)
+
+            lenSortedArr = len(sortedArr)
+
+            # if the i is found to be greator than i+1 then algo as failed
+            for i in range(lenSortedArr-1):
+                if(sortedArr[i] <= sortedArr[i+1]):
+                    pass
+                else:
+                    failed = True
+            
+            # if another smallest number is found then algo as failed as in sorted array the smallest number will be at index 0
+            smallest = sortedArr[0]
+            for i in sortedArr:
+                if(smallest > i):
+                    failed = True
+
+            # if the another largest number is found then algo is failed
+            largest = sortedArr[-1]
+            for i in sortedArr:
+                if(largest < i):
+                    failed = True
+            
+            # comparing result to python inbuilt sorter
+            if(sorted(arr) != sortedArr):
+                failed = True
+
+
+
+            # print result
+            if(failed):
+                failedNo = failedNo + 1
+
+        avgTime  = avgTime / repeat
+        print()
+
+        if(failedNo == 0):
+            print(blueColor + "avg time taken by {} function per array = {}".format(sortingAlgo.__name__ , avgTime))
+            print(greenColor + "{} function test passed".format(sortingAlgo.__name__))
+        else:
+            print(redColor + "{} function test failed".format(sortingAlgo.__name__))
+            print(redColor + "error = {} / {}".format(failedNo , repeat))
+
+
+    sortingAlgoList = [SORTA.SortingAlgo.insertionSort , SORTA.SortingAlgo.bubbleSort ,SORTA.SortingAlgo.selectionSort , SORTA.SortingAlgo.mergeSort , SORTA.SortingAlgo.quickSort]
+
+    testSorting(SORTA.SortingAlgo.countingSort)
+
+    for i in sortingAlgoList:
+        testSorting(i , onlyInt=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def binarySearchIterativeFuncTest():
+
+    print("\n\n")
+
+    # testing binary search iterative function 
+    print(whiteColor + "Testing binary search iterative function")
+
+
+
+    def binary_search_iterativeTest(howMany):
+
+        
+        # transpose using numpy
+        def normalLinearSearch(iterator , toSearch):
+            for i,j in enumerate(iterator):
+                if(j == toSearch):
+                    return i
+            return None
+
+        avgTime = 0
+        error = 0
+        errorList = []
+
+
+        for k in range(howMany):
+
+
+            n = random.randint(1 , 10000)
+
+            myList = []
+
+            for i in range(n):
+                if(i not in myList):
+                    myList.append(random.randint(0 , 100000000))
+
+            myList = sorted(myList)
+
+            randomElementFromList = random.choice(myList)
+
+            result2 = normalLinearSearch(myList , randomElementFromList)
+
+            print(f"\ron {k} / {howMany}" , end = "")
+
+            start = time.time()
+            result1 = SEACA.SearchingAlgo.binarySearch(myList , randomElementFromList)
+            end = time.time()
+
+
+            avgTime = avgTime + (end - start)
+
+
+            if(result1 != result2):
+                error = error + 1
+
+                errorList.append([myList , randomElementFromList , result1 , result2])
+
+        avgTime = avgTime / howMany
+
+        print()
+
+        return error , errorList , avgTime
+
+
+
+
+
+    error , errorList , avgTime = binary_search_iterativeTest(1000)
+
+    if(error == 0):
+        print(blueColor + "avg binary_search_iterativeTest function per array = {}".format(avgTime))
+        print(greenColor + "binary_search_iterativeTest function test passed")
+    else:
+        print(redColor + "binary_search_iterativeTest function test failed")
+        print(redColor + "error = {} / {}".format(error , 1000))
+        print(redColor + "error list = {}".format(errorList))
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def binarySearchRecursiveFuncTest():
+
+    print("\n\n")
+
+    # testing binary search recursive function 
+    print(whiteColor + "Testing binary search recursive function")
+
+
+
+    def binary_search_recursiveTest(howMany):
+
+        
+        # transpose using numpy
+        def normalLinearSearch(iterator , toSearch):
+            for i,j in enumerate(iterator):
+                if(j == toSearch):
+                    return i
+            return None
+
+        avgTime = 0
+        error = 0
+        errorList = []
+
+
+        for k in range(howMany):
+
+
+            n = random.randint(1 , 10000)
+
+            myList = []
+
+            for i in range(n):
+                if(i not in myList):
+                    myList.append(random.randint(0 , 100000000))
+
+            myList = sorted(myList)
+
+            randomElementFromList = random.choice(myList)
+
+            result2 = normalLinearSearch(myList , randomElementFromList)
+
+            print(f"\ron {k} / {howMany}" , end = "")
+
+            start = time.time()
+            result1 = SEACA.SearchingAlgo.binarySearch_usingRecursion(myList , randomElementFromList)
+            end = time.time()
+
+
+            avgTime = avgTime + (end - start)
+
+
+            if(result1 != result2):
+                error = error + 1
+
+                errorList.append([myList , randomElementFromList , result1 , result2])
+
+        avgTime = avgTime / howMany
+
+        print()
+
+        return error , errorList , avgTime
+
+
+
+
+
+    error , errorList , avgTime = binary_search_recursiveTest(1000)
+
+    if(error == 0):
+        print(blueColor + "avg binary_search_recursiveTest function per array = {}".format(avgTime))
+        print(greenColor + "binary_search_recursiveTest function test passed")
+    else:
+        print(redColor + "binary_search_recursiveTest function test failed")
+        print(redColor + "error = {} / {}".format(error , 1000))
+        print(redColor + "error list = {}".format(errorList))
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
 
     testsDict = {
@@ -496,6 +864,9 @@ if __name__ == "__main__":
         3 : transposeFuncTest , 
         4 : meanFunctionTest , 
         5 : multiplyFunctionTest ,
+        6 : sortingTester ,
+        7 : binarySearchIterativeFuncTest ,
+        8 : binarySearchRecursiveFuncTest ,
     }
 
     print("Select space seperated choices from below or 0 for all")

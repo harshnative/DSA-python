@@ -390,89 +390,6 @@ class SortingAlgo:
 
 
 
-# function to test the sorting algo's
-def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 1000 , onlyInt = True):
-    
-    # arrSize should be less than 10
-    if(arrSize < 10):
-        print("array size cannot be less than 10")
-        return
-
-    failedNo = 0
-    avgTime = 0
-
-    for count in range(repeat):
-        os.system("clear")
-        failed = False
-
-        print("on - ", count)
-        
-        arr = []
-
-        # generating a array with random numbers of size arrSize
-        for _ in range(arrSize):
-            toAppend = 0
-            if(onlyInt):
-                toAppend = random.randint(minElement , maxElement)
-            else:
-                toAppend = random.uniform(float(minElement) , float(maxElement))
-
-            arr.append(toAppend)
-        
-        print("generated array of length = {}\n".format(str(len(arr))))
-
-        
-        # sorting the array using algo 
-        begin = time.time() 
-
-        # change the sorting method here
-        sortedArr = SortingAlgo.quickSort(arr , pivotElement=1)
-
-        end = time.time() 
-        print(f"Total runtime of the loop is {end - begin}")
-        avgTime = avgTime + (end - begin)
-
-        lenSortedArr = len(sortedArr)
-
-        # if the i is found to be greator than i+1 then algo as failed
-        for i in range(lenSortedArr-1):
-            if(sortedArr[i] <= sortedArr[i+1]):
-                pass
-            else:
-                failed = True
-        
-        # if another smallest number is found then algo as failed as in sorted array the smallest number will be at index 0
-        smallest = sortedArr[0]
-        for i in sortedArr:
-            if(smallest > i):
-                failed = True
-
-        # if the another largest number is found then algo is failed
-        largest = sortedArr[-1]
-        for i in sortedArr:
-            if(largest < i):
-                failed = True
-        
-        # comparing result to python inbuilt sorter
-        if(sorted(arr) != sortedArr):
-            failed = True
-
-
-
-        # print result
-        if(failed):
-            print("count failed ..")
-            failedNo = failedNo + 1
-        else:
-            print("count pass successfull")
-
-    os.system("clear")
-    print("test failed number = {}".format(failedNo))
-    print("avgTime = {}".format(avgTime / (repeat-1)))
-
-
-
-
 
 
 
@@ -481,7 +398,6 @@ def testSorting(minElement = -10000 , maxElement = 10000 , arrSize = 10000 , rep
 if __name__ == "__main__":
     # arr = [5,7,6,9,4,8,1,2,3]
     # print(SortingAlgo.quickSort(arr))
-    testSorting(arrSize=10000 , onlyInt=False)
             
             
 
