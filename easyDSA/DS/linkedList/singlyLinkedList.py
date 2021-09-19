@@ -113,8 +113,8 @@ class SinglyLinkedList:
     # raiseError if the pos is not found else return None
     def getNodeAtPos(self, pos , raiseError = False):
 
-        if(pos < 1):
-            raise Exception("position cannot be less than 1")
+        if(pos < 0):
+            raise Exception("position cannot be less than 0")
 
         last = self.head
         found = False
@@ -123,7 +123,7 @@ class SinglyLinkedList:
         while(last != None):
 
             # if pos is found - break
-            if(pos == 1):
+            if(pos == 0):
                 found = True
                 break
 
@@ -370,13 +370,13 @@ class SinglyLinkedList:
     # position starts from 1 
     def deleteNodeAtPos(self , pos):
 
-        if(pos < 1):
-            raise Exception("position should not be less than 1 , head is at 1'st position")
+        if(pos < 0):
+            raise Exception("position should not be less than 0 , head is at 0'th position")
 
         # for keeping track of prev node
         prev = None
 
-        tempPos = 1
+        tempPos = 0
 
         last = self.head
 
@@ -388,8 +388,9 @@ class SinglyLinkedList:
                 # if the pos is head
                 if(prev == None):
                     self.head = last.next
+                    return
 
-
+                
                 prev.next = last.next
 
             prev = last
@@ -467,7 +468,7 @@ class SinglyLinkedList:
         while(last != None):
 
             if(last.data == key):
-                returnNode == True 
+                returnNode = True 
 
             # if the node is set to be returned
             if(returnNode):
@@ -585,30 +586,42 @@ class SinglyLinkedList:
                 else:
                     temp = temp.next
 
+                if(temp == None):
+                    break
+
             last = last.next
+
+            if(last == None):
+                break
+
 
 
     # function to reverse a linked list
     def reverseLinkedList(self):
-        current = self.head
-        prev = None
-        next = None
+
+        currentList = []
+
+        last = self.head
+
+        while(last != None):
+
+            nextNode = last.next
+
+            currentList.append(last.data)
+
+            del last.data
+            del last.next
+
+            last = nextNode
+
+        self.head = None
         
-        while(current != None):
+        for i in currentList:
+            self.insertAtFront(i)
+        
+        
 
-            # storing next
-            next = current.next
-
-            # reversing the direction
-            current.next = prev
-
-            # moving to next element
-            prev = current
-            current = next
-
-            # just to avoid infinite loop
-            if(current == self.head):
-                break
+        
 
 
                     
@@ -689,6 +702,11 @@ def test():
     print("\n List after adding 2 at front\n")
     sll1.insertAtFront(2)
     sll1.traverseList()
+
+    print("\n reverse\n")
+    sll1.reverseLinkedList()
+    sll1.traverseList()
+    
 
     print("\n List after adding 3 2's at end\n")
     sll1.insertAtEnd(2)

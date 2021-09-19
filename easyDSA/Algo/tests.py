@@ -1,4 +1,5 @@
 import random
+import string
 
 import cProfile
 import pstats   
@@ -9,8 +10,6 @@ import numpy
 import sys
 import os
 
-from numpy.core.fromnumeric import transpose
-from numpy.core.numeric import array_equal
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import matrixOperations as MO
@@ -530,10 +529,10 @@ def sortingTester():
 
 
     # function to test the sorting algo's
-    def testSorting(sortingAlgo , minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 1000 , onlyInt = True):
+    def testSorting(sortingAlgo , minElement = -10000 , maxElement = 10000 , arrSize = 10000 , repeat = 1000 , onlyInt = True , randomStrings = False):
 
         print("\n\n")
-        print(whiteColor + "Testing {} function".format(sortingAlgo.__name__))
+        print(whiteColor + "Testing {} function with randomStrings = {}".format(sortingAlgo.__name__ , randomStrings))
 
         failedNo = 0
         avgTime = 0
@@ -545,16 +544,21 @@ def sortingTester():
             
             arr = []
 
-            # generating a array with random numbers of size arrSize
-            for _ in range(arrSize):
-                toAppend = 0
-                if(onlyInt):
-                    toAppend = random.randint(minElement , maxElement)
-                else:
-                    toAppend = random.uniform(float(minElement) , float(maxElement))
+            if(randomStrings):
+                for _ in range(arrSize):
+                    arr.append(''.join(random.choices(string.ascii_letters + string.digits, k = random.randint(1 , 100))))
 
-                arr.append(toAppend)
-            
+            else:
+                # generating a array with random numbers of size arrSize
+                for _ in range(arrSize):
+                    toAppend = 0
+                    if(onlyInt):
+                        toAppend = random.randint(minElement , maxElement)
+                    else:
+                        toAppend = random.uniform(float(minElement) , float(maxElement))
+
+                    arr.append(toAppend)
+                
 
             
             # sorting the array using algo 
@@ -612,12 +616,13 @@ def sortingTester():
             print(redColor + "error = {} / {}".format(failedNo , repeat))
 
 
-    sortingAlgoList = [SORTA.SortingAlgo.insertionSort , SORTA.SortingAlgo.bubbleSort ,SORTA.SortingAlgo.selectionSort , SORTA.SortingAlgo.mergeSort , SORTA.SortingAlgo.quickSort]
+    sortingAlgoList = [SORTA.SortingAlgo.mergeSort , SORTA.SortingAlgo.quickSort , SORTA.SortingAlgo.insertionSort , SORTA.SortingAlgo.bubbleSort ,SORTA.SortingAlgo.selectionSort]
 
     testSorting(SORTA.SortingAlgo.countingSort)
 
     for i in sortingAlgoList:
         testSorting(i , onlyInt=False)
+        testSorting(i , onlyInt=False , randomStrings=True)
 
 
 

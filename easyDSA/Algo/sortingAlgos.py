@@ -398,6 +398,7 @@ class SortingAlgo:
 if __name__ == "__main__":
     # arr = [5,7,6,9,4,8,1,2,3]
     # print(SortingAlgo.quickSort(arr))
+    pass
             
             
 
